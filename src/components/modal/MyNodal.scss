@@ -1,0 +1,13 @@
+.modal-container {
+    animation: A ease 0.25s;
+}
+
+@keyframes A {
+    from {
+        transform: translateY(-10px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+

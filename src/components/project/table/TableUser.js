@@ -13,7 +13,7 @@ const MyTable = ({ listUsers }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {listUsers &&
+                    {listUsers && listUsers.length > 0 &&
                         listUsers.map((user, index) => {
                             return (
                                 <tr key={`user-${index}`} className="divide-x">

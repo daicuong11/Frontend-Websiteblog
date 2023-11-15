@@ -1,0 +1,9 @@
+.header {
+
+    border-bottom: 1px solid #e8ebed;
+}
+
+.back:hover .icon-back {
+    transform: translateX(-4px);
+    transition: transform 0.3s ease-in-out;
+}

@@ -16,3 +16,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* CSS */
+/* Webkit browsers (Chrome, Safari, Opera) */
+::-webkit-scrollbar {
+  width: 8px; /* Chiều rộng của thanh trượt */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Màu của thanh trượt */
+  border-radius: 6px; /* Độ cong của góc thanh trượt */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff; /* Màu của phần dừng lại (track) */
+}
+
+/* Firefox */
+/* Chú ý: Firefox không hỗ trợ tùy chỉnh giao diện của thanh trượt bằng CSS nhiều như Webkit browsers */
+/* Đây chỉ là một số tùy chỉnh cơ bản */
+* {
+  scrollbar-color: #4F46E5 #E5E7EB; /* Màu của thanh trượt và track */
+  scrollbar-width: thin; /* Chiều rộng của thanh trượt */
+}
