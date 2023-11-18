@@ -4,4 +4,8 @@ const fetchGetAll = () => {
     return axios.get(`api/user`);
 }
 
-export { fetchGetAll };
+const fetchGetUserById = (id) => {
+    return axios.get(`api/user/${id}`);
+}
+
+export { fetchGetAll, fetchGetUserById};

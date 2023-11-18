@@ -27,7 +27,7 @@ const Header = (props) => {
     }
 
     return (
-        <header className="bg-white h-[66px] header">
+        <header className="bg-white h-[66px] header fixed top-0 left-0 right-0">
             <div className="nav px-7 grid grid-cols-3 justify-between items-center h-full mx-auto">
                 <div className="header-nav-logo flex items-center">
                     <Link className="cursor-pointer" to={"/"}>
