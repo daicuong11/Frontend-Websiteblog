@@ -57,7 +57,7 @@ const Header = (props) => {
                                 // }
                                 templateHead={{ title: 'Bài viết của tôi', action: 'Xem tất cả' }}
                                 modalBody={
-                                    <div className="overflow-y-auto max-h-[460px] mb-2">
+                                    <div className="overflow-y-auto max-h-[460px] mb-2 pr-4">
                                         <ArticleCard />
                                         <ArticleCard />
                                         <ArticleCard />

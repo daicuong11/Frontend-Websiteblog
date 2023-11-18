@@ -6,7 +6,7 @@ import { fetchGetUserById } from "../../../services/UserService";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 
 
-const ArticleCardXL = ({ userID, title, description, categoryName, publishDate, articleImage }) => {
+const ArticleCardXL = ({ userID, articleID , title, description, categoryName, publishDate, articleImage }) => {
     const [user, setUser] = useState({});
     const [clickedOptions, setClickedOptions] = useState(false);
 
@@ -21,6 +21,8 @@ const ArticleCardXL = ({ userID, title, description, categoryName, publishDate, 
     useEffect(() => {
         getUserById(userID)
     }, [])
+
+    //console.log(categoryName);
     return (<>
         <div className="p-6 mb-4 border-2 rounded-2xl">
             <div className="flex justify-between items-center">
@@ -57,7 +59,7 @@ const ArticleCardXL = ({ userID, title, description, categoryName, publishDate, 
             </div>
             <div className="grid grid-cols-3">
                 <div className="col-span-2 mt-2">
-                    <Link to={"/article/{id}"} >
+                    <Link to={`/article/${articleID}`} >
                         <h1 className="text-xl font-bold">
                             {title || 'Authentication & Authorization trong ReactJS'}
                         </h1>
