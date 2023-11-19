@@ -22,6 +22,9 @@ const MyPagination = ({ totalPages, currentPage, pageSize, onPageChange, classNa
     };
 
     const handlePageChange = (newPage) => {
+        if(newPage === -1) {
+            return;
+        }
         if (onPageChange) {
             onPageChange(newPage);
         }
@@ -33,7 +36,7 @@ const MyPagination = ({ totalPages, currentPage, pageSize, onPageChange, classNa
             <div className={`flex justify-center items-center ${className}`}>
                 <div className="flex">
                     <div
-                        onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+                        onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : -1)}
                         className={`${
                             currentPage === 1 ? "cursor-default text-gray-300" : "cursor-pointer hover:border-[1px] hover:border-gray-300"
                         } py-[6px] px-3 mr-1 border-[1px] border-white text-sm font-semibold text-black rounded-md`}
@@ -47,7 +50,7 @@ const MyPagination = ({ totalPages, currentPage, pageSize, onPageChange, classNa
                             onClick={() => handlePageChange(pageNumber)}
                             className={`${
                                 currentPage === pageNumber
-                                    ? "bg-orange-500"
+                                    ? "bg-orange-600 text-white"
                                     : "hover:border-[1px] hover:border-gray-300"
                             } py-[6px] px-3 mr-1 cursor-pointer border-[1px] border-white text-sm font-semibold text-black rounded-md`}
                         >
@@ -56,7 +59,7 @@ const MyPagination = ({ totalPages, currentPage, pageSize, onPageChange, classNa
                     ))}
 
                     <div
-                        onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                        onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : -1)}
                         className={`${
                             currentPage === totalPages ? "cursor-default text-gray-300" : "cursor-pointer hover:border-[1px] hover:border-gray-300"
                         } py-[6px] px-3 mr-1 border-[1px] border-white text-sm font-semibold text-black rounded-md`}

@@ -8,11 +8,11 @@ const ListArticleSM = ({ categoryID }) => {
     const [listArticlesByCategoryID, setListArticlesByCategoryID] = useState([]);
 
     useEffect(() => {
-        getListArticlesOfBlog();
-    }, [])
+        getListArticlesOfBlog(categoryID);
+    }, [categoryID])
     //Lấy tất cả Article of blog
-    const getListArticlesOfBlog = async () => {
-        let res = await fetchGetAllArticleByCategoryID(categoryID);
+    const getListArticlesOfBlog = async (categoryID) => {
+        let res = await fetchGetAllArticleByCategoryID(categoryID, 1, 10);
         if (res.status === true) {
             setListArticlesByCategoryID(res.data);
         }

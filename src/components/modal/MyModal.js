@@ -21,7 +21,7 @@ const MyModal = ({ className, modalHead, textModalFoot, modalBody, onOpen, onClo
                     onClick={handleBackdropClick}
                 >
                     <div
-                        className={`transform-gpu transition-all min-w-[200px] min-h-[20px] modal-container absolute shadow-[0_0px_10px_10px_rgba(0,0,0,0.08)] rounded-xl ${className}`}
+                        className={`bg-white transform-gpu transition-all min-w-[200px] min-h-[20px] modal-container absolute shadow-[0_0px_10px_10px_rgba(0,0,0,0.08)] rounded-xl ${className}`}
                         onClick={handleContainerClick}
                     >
                         <div className="modal-head relative flex justify-between items-center my-4 px-[20px]">

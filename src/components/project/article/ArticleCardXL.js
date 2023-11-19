@@ -6,7 +6,7 @@ import { fetchGetUserById } from "../../../services/UserService";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 
 
-const ArticleCardXL = ({ userID, articleID , title, description, categoryName, publishDate, articleImage }) => {
+const ArticleCardXL = ({ userID, articleID , title, description, categoryID, categoryName, publishDate, articleImage, handleSetCategoryAndPageNumber }) => {
     const [user, setUser] = useState({});
     const [clickedOptions, setClickedOptions] = useState(false);
 
@@ -68,7 +68,7 @@ const ArticleCardXL = ({ userID, articleID , title, description, categoryName, p
                         {description || 'Authentication và Authorization là một phần quan trọng trong việc phát triển phần mềm, giúp chúng ta xác thực và phân quyền...'}
                     </p>
                     <div className="flex mt-3 justify-start items-center">
-                        <div className="py-1 px-2 cursor-pointer font-semibold text-black text-sm bg-gray-200 rounded-full">{categoryName || 'Blog'}</div>
+                        <div onClick={() => {handleSetCategoryAndPageNumber({categoryID, categoryName}, 1)}} className="py-1 px-2 cursor-pointer font-semibold text-black text-sm bg-gray-200 rounded-full">{categoryName || 'Blog'}</div>
                         <p className="text-sm ml-4">{publishDate || '01/01/2023'}</p>
                     </div>
                 </div>
