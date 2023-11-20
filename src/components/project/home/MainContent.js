@@ -11,7 +11,14 @@ import MyPanigation from "../../project/panigation/MyPanigation";
 import { fetchGetAllArticle, fetchGetAllArticleByCategoryID } from "../../../services/ArticleService";
 import { useEffect, useState } from "react";
 
+const listCategoryDes = {
+    "Blog": 'Tổng hợp các blog chia sẻ về kinh nghiệm tự học và cuộc sống.',
+    "Giải trí": 'Tổng hợp các bài viết giải trí vui vẻ.',
+    "Mới nhất": 'Tổng hợp các bài viết mới nhất.',
+    "Đọc nhiều nhất": 'Tổng hợp các bài viết đọc nhiều nhất.',
+    "Others": 'Tổng hợp các bài viết khác',
 
+}
 
 const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pageNumber, handleSetPageNumber, handleSetCategoryAndPageNumber }) => {
     const [listArticles, setListArticles] = useState([]);
@@ -24,9 +31,13 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
         setOpenModalCreateBLog(false);
     }
 
+
     useEffect(() => {
         if (currentCategoryID === -1) {
             getListArticles(pageNumber);
+        }
+        else if (currentCategoryID <= -2) {
+            getListArticlesByOptions(currentCategoryID, pageNumber);
         }
         else {
             getListArticlesByCategoryID(currentCategoryID, pageNumber);
@@ -51,10 +62,79 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
         }
     }
 
+    // Lấy tất cả article mới nhất, đọc nhiều nhất, khác
+    const getListArticlesByOptions = async (optionSelected, pageNumber, pageSize = 10) => {
+        let res;
+        if (optionSelected === -2) {
+            // Lấy mới nhất
+            res = {
+                "status": true,
+                "message": "List of articles latest",
+                "data": [],
+                "pageNumber": 0,
+                "pageSize": 10,
+                "totalItems": 0,
+                "totalPages": 0,
+                "firstPageUrl": null,
+                "lastPageUrl": null,
+                "prevPageUrl": null,
+                "nextPageUrl": null
+            }
+        }
+        else if (optionSelected === -3) {
+            // Lấy đọc nhiều nhất
+            res = {
+                "status": true,
+                "message": "List of articles viewest",
+                "data": [],
+                "pageNumber": 0,
+                "pageSize": 10,
+                "totalItems": 0,
+                "totalPages": 0,
+                "firstPageUrl": null,
+                "lastPageUrl": null,
+                "prevPageUrl": null,
+                "nextPageUrl": null
+            }
+        }
+        else if (optionSelected === -4) {
+            // Lấy khác
+            res = {
+                "status": true,
+                "message": "List of articles others",
+                "data": [],
+                "pageNumber": 0,
+                "pageSize": 10,
+                "totalItems": 0,
+                "totalPages": 0,
+                "firstPageUrl": null,
+                "lastPageUrl": null,
+                "prevPageUrl": null,
+                "nextPageUrl": null
+            }
+        }
+
+        if (res && res.status === true) {
+            setListArticles(res.data);
+            setPaginationInfo(res);
+        }
+    }
+
+
     //handle page number changes
     const handlePageChange = (pageNumber) => {
         handleSetPageNumber(pageNumber);
     }
+
+    //handle getCategory by categoryName
+    const handleGetCategoryByCategoryName = (categoryName) => {
+        if (listCategory) {
+            return listCategory.find(c => c.categoryName === categoryName);
+        }
+        return null;
+    };
+
+
     return (
         <div className="grid grid-cols-12 mt-4">
             {/* layout left */}
@@ -114,7 +194,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                 <div className="px-11 mb-[60px]">
                     <div className="mb-20">
                         <h1 className="text-[28px] font-black my-[18px]">{currentCategoryName || 'Bài viết nổi bật'}</h1>
-                        <div className="text-sm">Tổng hợp các bài viết chia sẻ về kinh nghiệm tự học lập trình online và các kỹ thuật lập trình web.</div>
+                        <div className="text-sm">{listCategoryDes[`${currentCategoryName}`] || 'Tổng hợp các bài viết chia sẻ về kinh nghiệm và giải trí hằng ngày.'}</div>
                     </div>
                     <div className="grid grid-cols-12">
                         {/* List article */}
@@ -128,12 +208,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
 
                                             <ArticleCardXL
                                                 key={`article-${index + 1}`}
-                                                articleID={article.articleID}
-                                                userID={article.userID}
-                                                title={article.title}
-                                                description={article.description}
-                                                articleImage={`https://localhost:7020/api/images/${(article.imagePath)}`}
-                                                publishDate={article.publishDate.split('T')[0]}
+                                                article={article}
                                                 categoryID={curCategory ? curCategory.categoryID : 1}
                                                 categoryName={curCategory ? curCategory.categoryName : ''}
                                                 handleSetCategoryAndPageNumber={handleSetCategoryAndPageNumber}
@@ -167,20 +242,20 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                 <h3 className="uppercase text-sm font-semibold text-gray-500">Các chủ đề được đề xuất</h3>
                             </div>
                             <ul className="my-4">
-                                <li className="mr-4 mb-4 inline-block">
-                                    <Link className="px-4 py-[6px] text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Blog</Link>
+                                <li onClick={() => handleSetCategoryAndPageNumber(handleGetCategoryByCategoryName('Blog'), 1)} className="mr-2 mb-2 inline-block">
+                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Blog</div>
                                 </li>
-                                <li className="mr-4 mb-4 inline-block">
-                                    <Link className="px-4 py-[6px] text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Giải trí</Link>
+                                <li onClick={() => handleSetCategoryAndPageNumber(handleGetCategoryByCategoryName('Giải trí'), 1)} className="mr-2 mb-2 inline-block">
+                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Giải trí</div>
                                 </li>
-                                <li className="mr-4 mb-4 inline-block">
-                                    <Link className="px-4 py-[6px] text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Mới nhất</Link>
+                                <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -2, categoryName: 'Mới nhất' }, 1)} className="mr-2 mb-2 inline-block">
+                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Mới nhất</div>
                                 </li>
-                                <li className="mr-4 mb-4 inline-block">
-                                    <Link className="px-4 py-[6px] text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Đọc nhiều nhất</Link>
+                                <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -3, categoryName: 'Đọc nhiều nhất' }, 1)} className="mr-2 mb-2 inline-block">
+                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Đọc nhiều nhất</div>
                                 </li>
-                                <li className="mr-4 mb-4 inline-block">
-                                    <Link className="px-4 py-[6px] text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Others</Link>
+                                <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -4, categoryName: 'Others' }, 1)} className="mr-2 mb-2 inline-block">
+                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Others</div>
                                 </li>
                             </ul>
 
@@ -198,7 +273,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                 </div>
                             </div>
 
-                            <div className="mt-8 pr-[70px]">
+                            <div className="mt-8 pr-[54px]">
                                 <div className="flex justify-center items-center mb-4">
                                     <Link to={"/entertainment"}>
                                         <h3 className="inline-block border-b-2 border-orange-500">Blog</h3>
@@ -209,7 +284,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                 />
                             </div>
 
-                            <div className="mt-8 pr-[70px]">
+                            <div className="mt-8 pr-[54px]">
                                 <div className="flex justify-center items-center mb-4">
                                     <Link to={"/entertainment"}>
                                         <h3 className="inline-block border-b-2 border-orange-500">Giải Trí</h3>

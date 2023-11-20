@@ -4,7 +4,7 @@ import ArticleCardL from "../article/ArticleCardL"
 import { fetchGetAllArticleByCategoryID } from "../../../services/ArticleService";
 
 
-const ListArticleSM = ({ categoryID }) => {
+const ListArticleSM = ({ categoryID, isFlexRow, title, className }) => {
     const [listArticlesByCategoryID, setListArticlesByCategoryID] = useState([]);
 
     useEffect(() => {
@@ -19,34 +19,41 @@ const ListArticleSM = ({ categoryID }) => {
     }
 
     return (
-        <ul>
-            {listArticlesByCategoryID.slice(0, 4).map((article, index) => {
-                if (index === 0) {
-                    return (
-                        <li key={`article-${index}`}>
-                            <ArticleCardL
-                                title={article.title}
-                                articleImagePath={`https://localhost:7020/api/images/${(article.imagePath)}`}
-                            />
-                        </li>
-                    )
-                }
-                else {
-                    return (
-                        <li key={`article-${index}`}>
-                            <hr className="ml-3" />
-                            <ArticleCard
-                                hoverText={true}
-                                hidenStatus={true}
-                                title={article.title}
-                                articleImagePath={`https://localhost:7020/api/images/${(article.imagePath)}`}
-                                description={article.description}
-                            />
-                        </li>
-                    )
-                }
-            })}
-        </ul>)
+        <div>
+            {
+                title &&
+                <div className={`flex justify-center items-center mb-4 ${className}`}>
+                    <h3 className="inline-block border-b-2 border-orange-500 text-2xl font-semibold pb-2">{title}</h3>
+                </div>
+            }
+            <ul>
+                {listArticlesByCategoryID.slice(0, 4).map((article, index) => {
+                    if (index === 0) {
+                        return (
+                            <li className="mt-4 flex-col justify-center items-center" key={`article-${index}`}>
+                                <ArticleCardL
+                                    isFlexRow={isFlexRow}
+                                    article={article}
+                                />
+                            </li>
+                        )
+                    }
+                    else {
+                        return article && (
+                            <li className="mt-4 flex-col justify-center items-center" key={`article-${index}`}>
+                                <hr className="mb-4"/>
+                                <ArticleCard
+                                    hoverText={true}
+                                    hidenStatus={true}
+                                    article={article}
+                                />
+                            </li>
+                        )
+                    }
+                })}
+            </ul>
+        </div>
+    )
 }
 
 export default ListArticleSM;

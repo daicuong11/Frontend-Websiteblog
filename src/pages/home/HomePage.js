@@ -12,10 +12,10 @@ const HomePage = () => {
 
 
     const handleSetCategoryAndPageNumber = (category, pageNumber) => {
-        setCategorySelected(category); 
+        setCategorySelected(category);
         setPageNumber(pageNumber);
     }
-    
+
     const handleSetPageNumber = (pageNumber) => {
         setPageNumber(pageNumber);
     }
@@ -41,9 +41,15 @@ const HomePage = () => {
             {/* Hiển thị danh mục */}
             <div className="flex justify-center items-center">
                 <span className="flex border-b-2">
-                    <div onClick={() =>handleSetCategoryAndPageNumber({ categoryID: -1, categoryName: 'Bài viết nổi bật' }, 1)} className="text-sm mx-[6px] py-[14px] font-semibold hover:text-orange-500 cursor-pointer">
-                        <button className="focus:text-orange-500">Tất cả</button>
-                    </div>
+                    {(categorySelected.categoryID === -1) ?
+                        <div onClick={() => handleSetCategoryAndPageNumber({ categoryID: -1, categoryName: 'Bài viết nổi bật' }, 1)} className="text-orange-500 text-sm mx-[6px] py-[14px] font-semibold hover:text-orange-500 cursor-pointer">
+                            <button className="focus:text-orange-500">Tất cả</button>
+                        </div>
+                        :
+                        <div onClick={() => handleSetCategoryAndPageNumber({ categoryID: -1, categoryName: 'Bài viết nổi bật' }, 1)} className="text-sm mx-[6px] py-[14px] font-semibold hover:text-orange-500 cursor-pointer">
+                            <button className="focus:text-orange-500">Tất cả</button>
+                        </div>
+                    }
                     {listCategory && listCategory.map((category, index) => {
                         if (category.categoryID === categorySelected.categoryID) {
                             return (

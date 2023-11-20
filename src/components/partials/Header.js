@@ -4,15 +4,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import MySearch from '../search/MySearch';
 import MyModal from "../../components/modal/MyModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArticleCard from "../project/article/ArticleCard";
 import NotifyCard from "../project/notify/NotifyCard";
+import { fetchGetAllArticleByUserID } from "../../services/ArticleService";
 
 const Header = (props) => {
     const navigate = useNavigate();
     const [isOpenOptions, setIsOpenOptions] = useState(false);
     const [isOpenNotify, setIsOpenNotify] = useState(false);
     const [isOpenMyArticle, setIsOpenMyArticle] = useState(false);
+    const [myArticles, setMytArticles] = useState([]);
+
+    //giả sử userID hiện tại = 1 [Chỗ này nào làm Authentication jwt thì mới lấy userID]
+    const userID = 1;
+
+    useEffect(() => {
+        getListArticlesByUserID(userID);
+    }, [isOpenMyArticle, userID]);
 
     const handleOnCloseOptions = () => {
         setIsOpenOptions(false);
@@ -24,6 +33,14 @@ const Header = (props) => {
 
     const handleOnCloseMyArtilce = () => {
         setIsOpenMyArticle(false);
+    }
+
+    //Lấy tất cả Article của user [Chỗ này chưa làm endpoint nên sử dụng tạm fetch tất cả Article]
+    const getListArticlesByUserID = async (id) => {
+        let res = await fetchGetAllArticleByUserID(id);
+        if (res.status === true) {
+            setMytArticles(res.data);
+        }
     }
 
     return (
@@ -48,27 +65,19 @@ const Header = (props) => {
                             <MyModal
                                 onOpen={isOpenMyArticle}
                                 onClose={handleOnCloseMyArtilce}
-                                className={'right-[120px] top-14 w-[380px] bg-white'}
-                                // modalHead={
-                                //     <div className="flex justify-between items-center">
-                                //         <h1 className="text-lg font-semibold">Bài viết của tôi</h1>
-                                //         <p className="text-sm text-orange-500 cursor-pointer py-1 px-2 rounded hover:bg-slate-100">Xem tất cả</p>
-                                //     </div>
-                                // }
+                                className={'right-[120px] top-14 min-w-[380px] bg-white'}
                                 templateHead={{ title: 'Bài viết của tôi', action: 'Xem tất cả' }}
                                 modalBody={
-                                    <div className="overflow-y-auto max-h-[460px] mb-2 pr-4">
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
-                                        <ArticleCard />
+                                    <div className="overflow-y-auto max-w-[380px] max-h-[460px] mb-2">
+                                        {myArticles && myArticles.map((article, index) => {
+
+                                            return (
+
+                                                <ArticleCard
+                                                    article={article}
+                                                />
+                                            )
+                                        })}
                                     </div>
                                 }
                             />

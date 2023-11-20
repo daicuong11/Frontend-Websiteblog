@@ -13,7 +13,7 @@ const NotifyCard = ({image, title, time}) => {
                     <img className="rounded-full w-[42px] h-[42px] min-w-[42px] min-h-[42px]" alt="" src={`${image ||'/color.jpg'}`} />
                 </div>
                 <div className="flex flex-col justify-between items-start w-full">
-                    <div className="text-sm">Bài học <span className="font-semibold">{title || 'Lớp học Offline tại Hà Nội'}</span> mới được thêm vào.</div>
+                    <div className="text-sm">Bài viết <span className="font-semibold">{title || 'Lớp học Offline tại Hà Nội'}</span> mới được thêm vào.</div>
                     <div className="text-xs mt-1 text-orange-500 font-semibold">
                         {time || '3 ngày trước'}
                     </div>

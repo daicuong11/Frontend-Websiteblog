@@ -10,10 +10,6 @@ const ArtilceDetailsPage = () => {
     const { articleID } = useParams();
     const [article, setArticle] = useState();
 
-    useEffect(() => {
-        getArticleByID(articleID);
-    }, [articleID]);
-
     //get article by id
     const getArticleByID = async (id) => {
         let res = await fetchGetArticleById(id);
@@ -22,6 +18,14 @@ const ArtilceDetailsPage = () => {
         }
     }
 
+    useEffect(() => {
+        getArticleByID(articleID);
+    }, [articleID]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+    });
+
     return (
         <div className="mt-[66px] px-11">
             <div className="grid grid-cols-12">
@@ -29,7 +33,7 @@ const ArtilceDetailsPage = () => {
                     <div className="flex justify-end p-12 ml-auto">
                         <div>
                             <Link className="text-base font-semibold text-black mt-5" to={"auth/info"}>
-                                Lý Đại Cương
+                                {article ? article.user.name : 'Lý Đại Cương'}
                             </Link>
                             <hr className="min-w-[160px] mt-4"></hr>
                             <div className="flex mt-6">

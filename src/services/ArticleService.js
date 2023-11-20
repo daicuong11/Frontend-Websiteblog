@@ -12,4 +12,8 @@ const fetchGetAllArticleByCategoryID = (id, pageNumber, pageSize) => {
     return axios.get(`api/articles/category/${id}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
 }
 
-export { fetchGetAllArticle, fetchGetAllArticleByCategoryID, fetchGetArticleById };
+const fetchGetAllArticleByUserID = (id, pageNumber, pageSize) => {
+    return axios.get(`api/articles/user/${id}`);
+}
+
+export { fetchGetAllArticle, fetchGetAllArticleByCategoryID, fetchGetArticleById, fetchGetAllArticleByUserID };

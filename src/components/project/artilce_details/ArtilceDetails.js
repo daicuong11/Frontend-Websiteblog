@@ -1,8 +1,9 @@
-import { faBookmark, faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faCalendarDay, faClock, faEllipsis, faTimes } from "@fortawesome/free-solid-svg-icons";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import ArticleCardL from "../article/ArticleCardL";
+import ListArticleSM from "../list_article/ListArticleSM";
 
 
 const ArtilceDetails = ({ article }) => {
@@ -12,7 +13,6 @@ const ArtilceDetails = ({ article }) => {
         setClickedOptions(false);
     }
 
-    console.log(article);
     return (
         <div className="px-3 mb-16">
             <div className="flex-col mb-">
@@ -24,9 +24,18 @@ const ArtilceDetails = ({ article }) => {
                         </div>
                         <div className="flex-col ml-2">
                             <div className="text-base text-black font-semibold">
-                                {(article && article.user.name) || 'Đại Cương'}
+                                {article ? article.user.name : 'Lý Đại Cương'}
                             </div>
-                            <div className="text-gray-500 text-sm">01/01/2023</div>
+                            <div className="text-gray-500 text-sm">
+                                <span>
+                                    <FontAwesomeIcon color="gray" className="mr-2" icon={faCalendarDay} />
+                                    {article ? `${article.publishDate.split('.')[0].split('T')[0]}` : '01-01-2003'}
+                                </span>
+                                <span>
+                                    <FontAwesomeIcon color="gray" className="mr-2 ml-4" icon={faClock} />
+                                    {article ? `${article.publishDate.split('.')[0].split('T')[1]}` : '00:00:01'}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -99,12 +108,15 @@ const ArtilceDetails = ({ article }) => {
 
                 <div className="mt-[60px]">
                     <h3 className="text-[32px] font-bold my-5">Bài viết nổi bật khác</h3>
-
-                    <ArticleCardL
+                    <ListArticleSM
+                        title={'Các bài viết blog'}
+                        categoryID={1}
                         isFlexRow={true}
                     />
-
-                    <ArticleCardL
+                    <div className="my-8"></div>
+                    <ListArticleSM
+                        title={'Các bài viết giải trí'}
+                        categoryID={2}
                         isFlexRow={true}
                     />
                 </div>
