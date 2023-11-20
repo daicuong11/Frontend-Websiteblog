@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ import ArticleCard from "../project/article/ArticleCard";
 import NotifyCard from "../project/notify/NotifyCard";
 
 const Header = (props) => {
-
+    const navigate = useNavigate();
     const [isOpenOptions, setIsOpenOptions] = useState(false);
     const [isOpenNotify, setIsOpenNotify] = useState(false);
     const [isOpenMyArticle, setIsOpenMyArticle] = useState(false);
@@ -33,7 +33,7 @@ const Header = (props) => {
                     <Link className="cursor-pointer" to={"/"}>
                         <img alt="" className="w-[38px] h-[38px] rounded-[6px]" src="/color.jpg"></img>
                     </Link>
-                    <div className='back text-[12px] font-semibold flex items-center py-4 pl-4 text-gray-400 cursor-pointer'>
+                    <div onClick={() => navigate(-1)} className='back text-[12px] font-semibold flex items-center py-4 pl-4 text-gray-400 cursor-pointer'>
                         <FontAwesomeIcon icon={faChevronLeft} className='icon-back mr-1 w-[6.25px] h-[10px]' />
                         <span className="uppercase">Quay lại</span>
                     </div>

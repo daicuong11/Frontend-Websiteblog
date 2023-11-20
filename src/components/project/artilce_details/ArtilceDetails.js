@@ -1,34 +1,18 @@
 import { faBookmark, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ArticleCardL from "../article/ArticleCardL";
-import { fetchGetUserById } from "../../../services/UserService";
 
 
 const ArtilceDetails = ({ article }) => {
     const [clickedOptions, setClickedOptions] = useState(false);
-    const [user, setUser] = useState({});
-    
-
-    // useEffect(() => {
-    //     if(article.userID !== null){
-    //         console.log(article);
-    //         getUserById(article.userID);
-    //     }
-    // }, [article])
-
 
     const handleCloseModalOptions = () => {
         setClickedOptions(false);
     }
 
-    //Lấy use theo id 
-    const getUserById = async (id) => {
-        let res = await fetchGetUserById(id);
-        setUser(res.data);
-    }
-
+    console.log(article);
     return (
         <div className="px-3 mb-16">
             <div className="flex-col mb-">
@@ -36,11 +20,11 @@ const ArtilceDetails = ({ article }) => {
                 <div className="flex justify-between items-center mb-7">
                     <div className="flex items-center">
                         <div className="">
-                            <img className="w-[50px] h-[50px] max-w-[50px] max-h-[50px] border-[3px] border-r-red-500 border-t-yellow-500 border-b-red-500 border-l-red-500 rounded-full" alt="/color.jpg" src={user.image ? `https://localhost:7020/api/images/${user.image}` : "/color.jpg"} />
+                            <img className="w-[50px] h-[50px] max-w-[50px] max-h-[50px] border-[3px] border-r-red-500 border-t-yellow-500 border-b-red-500 border-l-red-500 rounded-full" alt="/color.jpg" src={"/color.jpg"} />
                         </div>
                         <div className="flex-col ml-2">
                             <div className="text-base text-black font-semibold">
-                                {(user && user.name) || 'Đại Cương'}
+                                {(article && article.user.name) || 'Đại Cương'}
                             </div>
                             <div className="text-gray-500 text-sm">01/01/2023</div>
                         </div>
@@ -72,9 +56,10 @@ const ArtilceDetails = ({ article }) => {
                 </div>
                 {/* description */}
                 <p className="text-lg my-[6px]">
-                    Authentication và Authorization là một phần quan trọng trong việc phát triển phần mềm, giúp chúng ta xác thực và phân quyền người dùng trước khi cho người dùng truy cập vào tài nguyên của ứng dụng.
+                    {article ? article.description : 'Authentication và Authorization là một phần quan trọng trong việc phát triển phần mềm, giúp chúng ta xác thực và phân quyền người dùng trước khi cho người dùng truy cập vào tài nguyên của ứng dụng.'}
                 </p>
 
+                {/* content */}
                 <div id="content-article" className="flex-col my-5">
                     <h3 className="text-xl font-bold my-5">1. Đặt vấn đề</h3>
                     <p className="text-lg my-[6px]">

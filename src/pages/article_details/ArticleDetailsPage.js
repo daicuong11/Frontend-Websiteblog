@@ -8,16 +8,16 @@ import { fetchGetArticleById } from "../../services/ArticleService";
 
 const ArtilceDetailsPage = () => {
     const { articleID } = useParams();
-    const [article, setArticle] = useState({});
+    const [article, setArticle] = useState();
 
     useEffect(() => {
         getArticleByID(articleID);
-    }, []);
+    }, [articleID]);
 
     //get article by id
     const getArticleByID = async (id) => {
         let res = await fetchGetArticleById(id);
-        if(res.status === true){
+        if (res.status === true) {
             setArticle(res.data);
         }
     }
@@ -34,7 +34,7 @@ const ArtilceDetailsPage = () => {
                             <hr className="min-w-[160px] mt-4"></hr>
                             <div className="flex mt-6">
                                 <div className="cursor-pointer ml-2 flex justify-center items-center text-gray-400 hover:text-gray-500" title="Nhấn để yêu thích bài này">
-                                <FontAwesomeIcon size="lg" icon={faHeart} />
+                                    <FontAwesomeIcon size="lg" icon={faHeart} />
                                     <span className="ml-2 text-base">12</span>
                                 </div>
                                 <div className="cursor-pointer ml-8 flex justify-center items-center text-gray-400 hover:text-gray-500" title="Nhấn để bình luận bài viết">
@@ -47,11 +47,11 @@ const ArtilceDetailsPage = () => {
                     </div>
                 </div>
                 <div className="col-span-6 overflow-y-auto">
-                    <ArtilceDetails 
-                    article={article}
+                    <ArtilceDetails
+                        article={article}
                     />
                 </div>
-                <div className="col-span-3 sticky top-[66px]">
+                <div className="col-span-3 sticky top-[66px] h-1">
 
                 </div>
             </div>
