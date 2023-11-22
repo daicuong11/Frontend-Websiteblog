@@ -10,11 +10,13 @@ import NotFound from './components/project/not_found/NotFound';
 import NewPostPage from './pages/new_post/NewPostPage';
 import NewPostLayout from './layouts/new_post/NewPostLayout';
 import { ToastContainer } from 'react-toastify';
+import { MyContextProvider } from './components/project/context/MyContextProvider';
 
 
 function App() {
   return (
-    <>
+    <MyContextProvider>
+
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomeLayout />}>
@@ -34,9 +36,10 @@ function App() {
       </BrowserRouter>
 
       <div>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
-    </>
+    </MyContextProvider>
+
   );
 }
 

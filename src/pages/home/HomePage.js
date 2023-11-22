@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { fetchGetAllCategory } from "../../services/CategoryService";
 import "./HomePage.scss";
 import MainContent from "../../components/project/home/MainContent";
+import { useContext } from "react";
+import { MyContext } from "../../components/project/context/MyContextProvider";
 
 
 
 const HomePage = () => {
     const [categorySelected, setCategorySelected] = useState({ categoryID: -1, categoryName: 'Bài viết nổi bật' });
-    const [listCategory, setListCategory] = useState([]);
+    const {listCategory, setListCategory} = useContext(MyContext);
     const [pageNumber, setPageNumber] = useState(1);
 
 

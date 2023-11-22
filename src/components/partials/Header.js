@@ -10,25 +10,91 @@ import NotifyCard from "../project/notify/NotifyCard";
 import { fetchGetAllArticleByUserID } from "../../services/ArticleService";
 import { useContext } from "react";
 import { MyContext } from "../project/context/MyContextProvider";
+import { toast } from "react-toastify";
+import { fetchGetUserByJWT } from "../../services/AuthService";
+import { fetchGetAllCategory } from "../../services/CategoryService";
 
 const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const navigate = useNavigate();
-    const { listDataContent, setListDataContent } = useContext(MyContext);
+    const { listDataContent} = useContext(MyContext);
     const [isOpenOptions, setIsOpenOptions] = useState(false);
     const [isOpenNotify, setIsOpenNotify] = useState(false);
     const [isOpenMyArticle, setIsOpenMyArticle] = useState(false);
     const [myArticles, setMytArticles] = useState([]);
     const [showModalCreateArticle, setShowModalCreateArticle] = useState(false);
+    const [listCategory, setListCategory] = useState([]);
 
-    // console.log(listDataContent);
+
+    //User
+    const [user, setUser] = useState();
+    const tokenJWT = localStorage.getItem('token');
+
+    
 
     //Bài viết
     const [articleTitle, setArticleTitle] = useState('');
     const [articleDescription, setArticleDescription] = useState('');
     const [articleImage, setArticleImage] = useState('');
 
+    //category
+    useEffect(() => {
+        getListCategory();
+    }, []);
+
+    // Lấy danh sách categories từ database
+    const getListCategory = async () => {
+        let res = await fetchGetAllCategory();
+        setListCategory(res.data);
+    }
+
+    const categoryID = listCategory.find(c => c.categoryName.toLowerCase() === window.location.href.split('/').pop())?.categoryID;
+    console.log(categoryID);
+    
+    //validator
+    const [titleError, setTitleError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
+    const [imageError, setImageError] = useState('');
+
+    const validateTitle = () => {
+        if (articleTitle.trim() === '') {
+            setTitleError('Tên bài viết không được để trống');
+            return false;
+        }
+        setTitleError('');
+        return true;
+    };
+
+    const validateDescription = () => {
+        if (articleDescription.trim() === '') {
+            setDescriptionError('Mô tả không được để trống');
+            return false;
+        }
+        setDescriptionError('');
+        return true;
+    };
+
+    const validateImage = () => {
+        if (!articleImage) {
+            setImageError('Hình ảnh không được để trống');
+            return false;
+        }
+        setImageError('');
+        return true;
+    };
 
     //giả sử userID hiện tại = 1 [Chỗ này nào làm Authentication jwt thì mới lấy userID]
+    useEffect(() => {
+        if (tokenJWT) {
+            handleGetUserByJwtToken();
+        }
+    }, []);
+
+    //get user by jwt token
+    const handleGetUserByJwtToken = async () => {
+        let res = await fetchGetUserByJWT();
+        console.log(res);
+    };
+
     const userID = 1;
 
     useEffect(() => {
@@ -64,13 +130,46 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     }
 
     //Create a new article
-    const handleClickCreateArticle = () => {
+    const handleClickCreateArticle = async () => {
+        const isTitleValid = validateTitle();
+        const isDescriptionValid = validateDescription();
+        const isImageValid = validateImage();
 
+        if (isTitleValid && isDescriptionValid && isImageValid) {
+            toast.success('Xuất bản thành công');
+            const newArticle = {
+                Title: articleTitle,
+                Description: articleDescription,
+                Image: articleImage,
+                Status: 'PENDING',
+                categoryID: categoryID,
+            }
+            console.log(newArticle);
+        } else {
+
+        }
     };
 
     //
     const handleImageChange = (e) => {
         setArticleImage(e.target.files[0]);
+        setImageError('');
+    };
+
+    //handle drag and drop image
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const droppedFiles = e.dataTransfer.files;
+
+        if (droppedFiles.length > 0) {
+            const droppedImage = droppedFiles[0];
+            setArticleImage(droppedImage);
+            setImageError('');
+        }
     };
 
     //
@@ -119,7 +218,8 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                         <div className="mb-5">
                                             <div className="my-5">
                                                 <div className="font-semibold">Tên bài viết</div>
-                                                <input type="text" value={articleTitle} onChange={(e) => setArticleTitle(e.target.value)} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded focus:border-orange-500" />
+                                                <input type="text" value={articleTitle} onChange={(e) => { setArticleTitle(e.target.value); setTitleError(''); }} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded focus:border-orange-500" />
+                                                <div className="text-red-500 text-sm">{titleError}</div>
                                             </div>
                                             <div className="my-5">
                                                 <div className="font-semibold">Mô tả</div>
@@ -127,10 +227,10 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                     style={{ height: `${articleDescription.split('\n').length * 40}px` }}
                                                     type="text"
                                                     value={articleDescription}
-                                                    onChange={(e) => setArticleDescription(e.target.value)}
+                                                    onChange={(e) => { setArticleDescription(e.target.value); setDescriptionError(''); }}
                                                     className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded focus:border-orange-500"
                                                 />
-
+                                                <div className="text-red-500 text-sm">{descriptionError}</div>
                                             </div>
                                             <div className="mt-5">
                                                 <div className="font-semibold">Hình ảnh</div>
@@ -139,6 +239,8 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                         className={`import-img w-full h-full ${articleImage ? "hover:bg-gray-200" : "bg-gray-100"
                                                             }`}
                                                         style={backgroundImageStyle}
+                                                        onDragOver={handleDragOver}
+                                                        onDrop={handleDrop}
                                                     >
                                                         <label
                                                             htmlFor="imageInput"
@@ -161,6 +263,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                         </label>
                                                     </div>
                                                 </div>
+                                                <div className="text-red-500 text-sm">{imageError}</div>
                                             </div>
 
                                             <div className="mt-5">

@@ -1,21 +1,20 @@
 import axios from "axios";
 
-// Tính năng lấy token từ local storage
 const getToken = () => {
-  // Điều chỉnh logic lấy token từ local storage của bạn tại đây
   return localStorage.getItem("token");
+};
+
+const delToken = () => {
+  return localStorage.removeItem("token");
 };
 
 const instance = axios.create({
   baseURL: 'https://localhost:7020/',
-  // Sử dụng hàm getToken() để lấy token từ local storage
   headers: { Authorization: getToken() ? `Bearer ${getToken()}` : undefined },
 });
 
-// Thêm interceptor để cập nhật token cho mỗi request
 instance.interceptors.request.use(
   function (config) {
-    // Trước mỗi request, kiểm tra xem token đã thay đổi chưa và cập nhật nếu cần
     const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -27,16 +26,16 @@ instance.interceptors.request.use(
   }
 );
 
-// Thêm interceptor xử lý response
 instance.interceptors.response.use(
   function (response) {
-    // Any status code that lies within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response.data ? response.data : { statusCode: response.status };
   },
   function (error) {
-    // Any status codes that fall outside the range of 2xx cause this function to trigger
-    // Do something with response error
+    if (error.response && error.response.status === 401) {
+      // Nếu mã lỗi là 401, chuyển hướng đến trang login
+      delToken();
+      window.location.href = '/login';
+    }
     return Promise.reject(error);
   }
 );

@@ -9,7 +9,7 @@ import ListArticleSM from "../../project/list_article/ListArticleSM";
 import MyPanigation from "../../project/panigation/MyPanigation";
 
 import { fetchGetAllArticle, fetchGetAllArticleByCategoryID } from "../../../services/ArticleService";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const listCategoryDes = {
     "Blog": 'Tổng hợp các blog chia sẻ về kinh nghiệm tự học và cuộc sống.',
@@ -152,23 +152,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                     <Link to={"/new_post/blog"} className={`cursor-pointer flex justify-start items-center py-3 px-4 mb-2 hover:bg-gray-100`}>
                                         <FontAwesomeIcon icon={faPen} />
                                         <div className="text-sm ml-4">Viết blog</div>
-                                        {/* <MyModal
-                                            className={'w-[800px] top-0 left-[300px] z-[1000000000] bg-white'}
-                                            onOpen={openModalCreateBLog}
-                                            onClose={() => (setOpenModalCreateBLog(false))}
-                                            modalHead={ (<div className="text-center">
-                                                Thông tin bài viết
-                                            </div>)}
-                                            modalBody={(<div className="px-4">
-                                                <hr/>
-                                                <div>
-                                                    <div>Xem trước</div>
-                                                    <div className="">
-                                                        <input className="bg-gray-200 w-[200px] h-[120px] max-w-[200px] max-h-[120px]"/>
-                                                    </div>
-                                                </div>
-                                            </div>)}
-                                        /> */}
+                                        
                                     </Link>
                                     <Link className="flex justify-start items-center py-3 px-4 mb-2 hover:bg-gray-100" to={"/new_post/entertainment"}>
                                         <FontAwesomeIcon icon={faPen} />
