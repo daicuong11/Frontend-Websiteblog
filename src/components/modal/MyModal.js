@@ -1,6 +1,6 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./MyNodal.scss";
+import "./MyModal.scss";
 
 const MyModal = ({ className, modalHead, textModalFoot, modalBody, onOpen, onClose, showIconClose, templateHead }) => {
 

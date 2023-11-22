@@ -8,13 +8,25 @@ import { useEffect, useState } from "react";
 import ArticleCard from "../project/article/ArticleCard";
 import NotifyCard from "../project/notify/NotifyCard";
 import { fetchGetAllArticleByUserID } from "../../services/ArticleService";
+import { useContext } from "react";
+import { MyContext } from "../project/context/MyContextProvider";
 
-const Header = (props) => {
+const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const navigate = useNavigate();
+    const { listDataContent, setListDataContent } = useContext(MyContext);
     const [isOpenOptions, setIsOpenOptions] = useState(false);
     const [isOpenNotify, setIsOpenNotify] = useState(false);
     const [isOpenMyArticle, setIsOpenMyArticle] = useState(false);
     const [myArticles, setMytArticles] = useState([]);
+    const [showModalCreateArticle, setShowModalCreateArticle] = useState(false);
+
+    // console.log(listDataContent);
+
+    //Bài viết
+    const [articleTitle, setArticleTitle] = useState('');
+    const [articleDescription, setArticleDescription] = useState('');
+    const [articleImage, setArticleImage] = useState('');
+
 
     //giả sử userID hiện tại = 1 [Chỗ này nào làm Authentication jwt thì mới lấy userID]
     const userID = 1;
@@ -35,7 +47,7 @@ const Header = (props) => {
         setIsOpenMyArticle(false);
     }
 
-    //Lấy tất cả Article của user [Chỗ này chưa làm endpoint nên sử dụng tạm fetch tất cả Article]
+    //Lấy tất cả Article của user 
     const getListArticlesByUserID = async (id) => {
         let res = await fetchGetAllArticleByUserID(id);
         if (res.status === true) {
@@ -43,8 +55,36 @@ const Header = (props) => {
         }
     }
 
+    //handle close modal create a new article
+    const handleCloseModalCreateNewArticle = () => {
+        setShowModalCreateArticle(false);
+        setArticleTitle('');
+        setArticleDescription('');
+        setArticleImage(null);
+    }
+
+    //Create a new article
+    const handleClickCreateArticle = () => {
+
+    };
+
+    //
+    const handleImageChange = (e) => {
+        setArticleImage(e.target.files[0]);
+    };
+
+    //
+    const backgroundImageStyle = {
+        backgroundImage: articleImage
+            ? `url(${URL.createObjectURL(articleImage)})`
+            : "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "200px",
+    };
+
     return (
-        <header className="bg-white h-[66px] header fixed top-0 left-0 right-0">
+        <header className="bg-white h-[66px] header fixed top-0 left-0 right-0 z-[9999]">
             <div className="nav px-7 grid grid-cols-3 justify-between items-center h-full mx-auto">
                 <div className="header-nav-logo flex items-center">
                     <Link className="cursor-pointer" to={"/"}>
@@ -56,10 +96,87 @@ const Header = (props) => {
                     </div>
                 </div>
                 <div className="header-nav-search flex justify-center items-center">
-                    <MySearch />
+                    {isShowSearch && <MySearch />}
                 </div>
                 <div className="header-nav-actions flex justify-end">
                     <div className='flex items-center'>
+                        {nav}
+
+                        {
+                            isShowBtnPublish
+                            &&
+                            <div>
+                                <button onClick={() => { setShowModalCreateArticle(!showModalCreateArticle) }} className={`py-1.5 px-4 ${listDataContent.length > 0 ? ' cursor-pointer bg-orange-600 hover:bg-orange-500' : ' cursor-default bg-orange-600 opacity-50'} rounded-full text-white mr-4 text-sm font-semibold`}>Xuất bản</button>
+                                <MyModal
+                                    onOpen={showModalCreateArticle}
+                                    onClose={handleCloseModalCreateNewArticle}
+                                    className={'w-[652px] top-[80px] left-[400px] z-[1000] bg-white'}
+                                    modalHead={(<div className="text-center font-semibold">
+                                        Tạo bài viết
+                                    </div>)}
+                                    modalBody={(<div className="px-4">
+                                        <hr />
+                                        <div className="mb-5">
+                                            <div className="my-5">
+                                                <div className="font-semibold">Tên bài viết</div>
+                                                <input type="text" value={articleTitle} onChange={(e) => setArticleTitle(e.target.value)} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded focus:border-orange-500" />
+                                            </div>
+                                            <div className="my-5">
+                                                <div className="font-semibold">Mô tả</div>
+                                                <textarea
+                                                    style={{ height: `${articleDescription.split('\n').length * 40}px` }}
+                                                    type="text"
+                                                    value={articleDescription}
+                                                    onChange={(e) => setArticleDescription(e.target.value)}
+                                                    className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded focus:border-orange-500"
+                                                />
+
+                                            </div>
+                                            <div className="mt-5">
+                                                <div className="font-semibold">Hình ảnh</div>
+                                                <div className="mt-2 w-full h-200">
+                                                    <div
+                                                        className={`import-img w-full h-full ${articleImage ? "hover:bg-gray-200" : "bg-gray-100"
+                                                            }`}
+                                                        style={backgroundImageStyle}
+                                                    >
+                                                        <label
+                                                            htmlFor="imageInput"
+                                                            className="w-full h-full cursor-pointer flex flex-col justify-center items-center"
+                                                        >
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                id="imageInput"
+                                                                hidden
+                                                                onChange={handleImageChange}
+                                                            />
+                                                            <p className="text-center text-sm text-gray-500 mb-2">
+                                                                Thêm một ảnh đại diện hấp dẫn sẽ giúp bài viết của bạn cuốn hút
+                                                                hơn với độc giả.
+                                                            </p>
+                                                            <p className="text-center text-sm text-orange-600">
+                                                                Kéo thả ảnh vào đây, hoặc bấm để chọn ảnh
+                                                            </p>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-5">
+                                                <div className="flex justify-between items-center">
+                                                    <div></div>
+                                                    <button onClick={() => handleClickCreateArticle()} className="px-[16px] py-[6px] bg-green-600 text-white rounded-md">
+                                                        Xuất bản ngay
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>)}
+                                />
+                            </div>
+                        }
+
                         <div onClick={() => setIsOpenMyArticle(!isOpenMyArticle)}>
                             <button className='p-1.5 mr-4 cursor-pointer text-sm font-semibold text-black hover:text-slate-500'>Bài viết của tôi</button>
                             <MyModal
@@ -74,6 +191,7 @@ const Header = (props) => {
                                             return (
 
                                                 <ArticleCard
+                                                    key={`article-${index}`}
                                                     article={article}
                                                 />
                                             )
@@ -156,7 +274,7 @@ const Header = (props) => {
                 </div>
 
             </div>
-        </header>
+        </header >
     );
 }
 

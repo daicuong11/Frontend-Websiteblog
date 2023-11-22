@@ -24,11 +24,10 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
     const [listArticles, setListArticles] = useState([]);
     const [clickOptionPlus, setClickOptionPlus] = useState(false);
     const [paginationInfo, setPaginationInfo] = useState({});
-    const [openModalCreateBLog, setOpenModalCreateBLog] = useState(false);
+    //const [openModalCreateBLog, setOpenModalCreateBLog] = useState(false);
 
     const handleClickOptionPlus = () => {
         setClickOptionPlus(false);
-        setOpenModalCreateBLog(false);
     }
 
 
@@ -150,7 +149,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                             onClose={handleClickOptionPlus}
                             modalBody={
                                 <div className="list-add-new-item">
-                                    <Link to={"/blog/new_post"} className={`cursor-pointer flex justify-start items-center py-3 px-4 mb-2 hover:bg-gray-100`}>
+                                    <Link to={"/new_post/blog"} className={`cursor-pointer flex justify-start items-center py-3 px-4 mb-2 hover:bg-gray-100`}>
                                         <FontAwesomeIcon icon={faPen} />
                                         <div className="text-sm ml-4">Viết blog</div>
                                         {/* <MyModal
@@ -171,7 +170,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                             </div>)}
                                         /> */}
                                     </Link>
-                                    <Link className="flex justify-start items-center py-3 px-4 mb-2 hover:bg-gray-100" to={"/entertainment/new_post"}>
+                                    <Link className="flex justify-start items-center py-3 px-4 mb-2 hover:bg-gray-100" to={"/new_post/entertainment"}>
                                         <FontAwesomeIcon icon={faPen} />
                                         <div className="text-sm ml-4">Bài giải trí</div>
                                     </Link>
@@ -220,7 +219,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                 (
                                     <div className="text-center">
                                         Haha! Chưa có bài viết nào.
-                                        <Link className="hover:text-orange-500 cursor-pointer transition-all" to={`/${currentCategoryName.toLowerCase()}/new_post`} >Viết ngay!</Link>
+                                        <Link className="hover:text-orange-500 cursor-pointer transition-all" to={`/${currentCategoryName ? currentCategoryName.toLowerCase() : 'blog'}/new_post`} >Viết ngay!</Link>
                                     </div>
                                 )
                             }

@@ -1,25 +1,20 @@
 import Header from '../../components/partials/Header';
 import Footer from '../../components/partials/Footer';
 import { Outlet } from 'react-router-dom';
-import { MyContextProvider } from '../../components/project/context/MyContextProvider';
+import { MyContextProvider} from '../../components/project/context/MyContextProvider';
 
-const HomeLayout = () => {
-
+const NewPostLayout = () => {
 
     return (
         <MyContextProvider>
-
             <>
-                <Header
-                    isShowSearch={true}
-                />
+                <Header isShowBtnPublish={true} />
                 <Outlet />
                 <Footer />
             </>
         </MyContextProvider>
-
     );
 }
 
 
-export default HomeLayout;
+export default NewPostLayout;

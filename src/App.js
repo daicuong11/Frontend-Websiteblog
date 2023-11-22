@@ -5,7 +5,11 @@ import HomeLayout from './layouts/home/HomeLayout';
 import HomePage from './pages/home/HomePage';
 import Login from './components/Login';
 import UserManagement from './pages/admin/UserManagement';
-import ArtilceDetailsPage from './pages/article_details/ArticleDetailsPage';
+import ArticleDetailsPage from './pages/article_details/ArticleDetailsPage';
+import NotFound from './components/project/not_found/NotFound';
+import NewPostPage from './pages/new_post/NewPostPage';
+import NewPostLayout from './layouts/new_post/NewPostLayout';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -14,16 +18,24 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomeLayout />}>
-            <Route index element={<HomePage />}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/blog/new_post' element={<Login/>}/>
-            <Route path='/article/:articleID' element={<ArtilceDetailsPage/>}/>
+            <Route index element={<HomePage />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/article/:articleID' element={<ArticleDetailsPage />} />
+          </Route>
+          <Route path='/' element={<NewPostLayout />}>
+            <Route path='/new_post/blog' element={<NewPostPage typePost={'blog'} />} />
+            <Route path='/new_post/entertainment' element={<NewPostPage typePost={'entertainment'} />} />
           </Route>
           <Route path='/admin' element={<HomeLayout />}>
-            <Route index element={<UserManagement />}/>
+            <Route index element={<UserManagement />} />
           </Route>
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+
+      <div>
+        <ToastContainer/>
+      </div>
     </>
   );
 }

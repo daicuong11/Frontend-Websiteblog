@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import ArtilceDetails from "../../components/project/artilce_details/ArtilceDetails";
+import ArticleDetails from "../../components/project/article_details/ArticleDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -51,7 +51,7 @@ const ArtilceDetailsPage = () => {
                     </div>
                 </div>
                 <div className="col-span-6 overflow-y-auto">
-                    <ArtilceDetails
+                    <ArticleDetails
                         article={article}
                     />
                 </div>

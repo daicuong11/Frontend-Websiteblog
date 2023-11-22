@@ -20,7 +20,6 @@ const HomePage = () => {
         setPageNumber(pageNumber);
     }
 
-
     useEffect(() => {
         getListCategory();
     }, []);
@@ -29,7 +28,6 @@ const HomePage = () => {
     const getListCategory = async () => {
         let res = await fetchGetAllCategory();
         setListCategory(res.data);
-        //console.log(res);
     }
 
     //console.log(categorySelected);

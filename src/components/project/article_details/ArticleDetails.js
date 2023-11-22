@@ -1,4 +1,4 @@
-import { faBookmark, faCalendarDay, faClock, faEllipsis, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faCalendarDay, faClock, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -15,7 +15,7 @@ const ArtilceDetails = ({ article }) => {
 
     return (
         <div className="px-3 mb-16">
-            <div className="flex-col mb-">
+            <div className="flex-col mb-4">
                 <h1 className="my-7 text-[40px] font-bold">{article ? article.title : 'Authentication & Authorization trong ReactJS'}</h1>
                 <div className="flex justify-between items-center mb-7">
                     <div className="flex items-center">
@@ -76,7 +76,7 @@ const ArtilceDetails = ({ article }) => {
                     </p>
                 </div>
 
-                <div className="mt-[60px]">
+                {/* <div className="mt-[60px]">
                     <ul>
                         <li className="inline-block">
                             <div className="py-1 px-[10px] bg-gray-100 rounded text-gray-500 cursor-pointer text-sm mt-2 mr-2">Mới nhất</div>
@@ -85,10 +85,10 @@ const ArtilceDetails = ({ article }) => {
                             <div className="py-1 px-[10px] bg-gray-100 rounded text-gray-500 cursor-pointer text-sm mt-2 mr-2">Yêu thích nhất</div>
                         </li>
                         <li className="inline-block">
-                            <div className="py-1 px-[10px] bg-gray-100 rounded text-gray-500 cursor-pointer text-sm mt-2 mr-2">Giải trí</div>
+                            <div className="py-1 px-[10px] bg-gray-100 rounded text-gray-500 cursor-pointer text-sm mt-2 mr-2">Đọc nhiều nhất</div>
                         </li>
                     </ul>
-                </div>
+                </div> */}
 
                 <div className="mt-[60px]">
                     <h3 className="text-[22px] font-semibold my-5">Bài đăng cùng tác giả</h3>
