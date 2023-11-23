@@ -1,19 +1,34 @@
 import { faBookmark, faCalendarDay, faClock, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import ArticleCardL from "../article/ArticleCardL";
+import { useEffect, useState } from "react";
 import ListArticleSM from "../list_article/ListArticleSM";
+import ContentIsShow from "../article_content/ContentIsShow";
+import { fetchGetAllArticleByUserID } from "../../../services/ArticleService";
+import { Link } from "react-router-dom";
 
 
 const ArtilceDetails = ({ article }) => {
     const [clickedOptions, setClickedOptions] = useState(false);
+    const [userArticles, setUserArticles] = useState([]);
+
+    useEffect(() => {
+        getListArticlesByUserID(article.user.userID);
+    }, []);
+
+    //Lấy tất cả Article của user 
+    const getListArticlesByUserID = async (id) => {
+        let res = await fetchGetAllArticleByUserID(id);
+        if (res.status === true) {
+            setUserArticles(res.data);
+        }
+    }
 
     const handleCloseModalOptions = () => {
         setClickedOptions(false);
     }
 
-    return (
+    return article && (
         <div className="px-3 mb-16">
             <div className="flex-col mb-4">
                 <h1 className="my-7 text-[40px] font-bold">{article ? article.title : 'Authentication & Authorization trong ReactJS'}</h1>
@@ -68,15 +83,18 @@ const ArtilceDetails = ({ article }) => {
                     {article ? article.description : 'Authentication và Authorization là một phần quan trọng trong việc phát triển phần mềm, giúp chúng ta xác thực và phân quyền người dùng trước khi cho người dùng truy cập vào tài nguyên của ứng dụng.'}
                 </p>
 
-                {/* content */}
-                <div id="content-article" className="flex-col my-5">
-                    <h3 className="text-xl font-bold my-5">1. Đặt vấn đề</h3>
-                    <p className="text-lg my-[6px]">
-                        Ví dụ web quản trị nhưng có những page chỉ quản trị cấp cao Super Admin mới có thể truy cập được, còn mấy ông quản trị Admin không được quyền truy cập. Tránh tình trạng sau này sắp bị đuổi việc mấy ông vào xoá tài liệu/ bài viết của trang web như... :D
-                    </p>
-                </div>
+                {/*render content */}
+                {article &&
+                    article.contents.map((content, index) => {
+                        return (
+                            <ContentIsShow
+                                key={index}
+                                content={content}
+                            />
+                        )
+                    })}
 
-                {/* <div className="mt-[60px]">
+                <div className="mt-[60px]">
                     <ul>
                         <li className="inline-block">
                             <div className="py-1 px-[10px] bg-gray-100 rounded text-gray-500 cursor-pointer text-sm mt-2 mr-2">Mới nhất</div>
@@ -88,18 +106,27 @@ const ArtilceDetails = ({ article }) => {
                             <div className="py-1 px-[10px] bg-gray-100 rounded text-gray-500 cursor-pointer text-sm mt-2 mr-2">Đọc nhiều nhất</div>
                         </li>
                     </ul>
-                </div> */}
+                </div>
 
                 <div className="mt-[60px]">
                     <h3 className="text-[22px] font-semibold my-5">Bài đăng cùng tác giả</h3>
 
-                    <ArticleCardL
-                        isFlexRow={true}
-                    />
+                    <div className="ml-5">
+                        <ul className="list-disc list-inside">
+                            {userArticles.map((article, index) => {
+                                return (
+                                    <li key={index} className="py-1 text-base">
+                                        <Link className="hover:underline" to={`/article/${article.articleID}`}>
+                                            {article.title}
+                                        </Link>
+                                    </li>
+                                )
+                            })
 
-                    <ArticleCardL
-                        isFlexRow={true}
-                    />
+                            }
+                        </ul>
+                    </div>
+
                 </div>
 
                 <div className="mt-[60px]">

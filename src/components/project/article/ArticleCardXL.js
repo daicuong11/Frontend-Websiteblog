@@ -16,7 +16,7 @@ const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
         window.scrollTo({ top: 0, behavior: 'auto' });
     };
 
-    return (<>
+    return article && (<>
         <div className="p-6 mb-4 border-2 rounded-2xl">
             <div className="flex justify-between items-center">
                 <div className="flex items-center">

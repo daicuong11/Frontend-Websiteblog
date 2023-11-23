@@ -37,18 +37,18 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const [articleImage, setArticleImage] = useState('');
 
     //category
-    useEffect(() => {
-        getListCategory();
-    }, []);
+    // useEffect(() => {
+    //     getListCategory();
+    // }, []);
 
-    // Lấy danh sách categories từ database
-    const getListCategory = async () => {
-        let res = await fetchGetAllCategory();
-        setListCategory(res.data);
-    }
+    // // Lấy danh sách categories từ database
+    // const getListCategory = async () => {
+    //     let res = await fetchGetAllCategory();
+    //     setListCategory(res.data);
+    // }
 
-    const categoryID = listCategory.find(c => c.categoryName.toLowerCase() === window.location.href.split('/').pop())?.categoryID;
-    console.log(categoryID);
+    // const categoryID = listCategory.find(c => c.categoryName.toLowerCase() === window.location.href.split('/').pop())?.categoryID;
+    // // console.log(categoryID);
     
     //validator
     const [titleError, setTitleError] = useState('');
@@ -100,6 +100,14 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     useEffect(() => {
         getListArticlesByUserID(userID);
     }, [isOpenMyArticle, userID]);
+    
+    //Lấy tất cả Article của user 
+    const getListArticlesByUserID = async (id) => {
+        let res = await fetchGetAllArticleByUserID(id);
+        if (res.status === true) {
+            setMytArticles(res.data);
+        }
+    }
 
     const handleOnCloseOptions = () => {
         setIsOpenOptions(false);
@@ -111,14 +119,6 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
 
     const handleOnCloseMyArtilce = () => {
         setIsOpenMyArticle(false);
-    }
-
-    //Lấy tất cả Article của user 
-    const getListArticlesByUserID = async (id) => {
-        let res = await fetchGetAllArticleByUserID(id);
-        if (res.status === true) {
-            setMytArticles(res.data);
-        }
     }
 
     //handle close modal create a new article
@@ -142,7 +142,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                 Description: articleDescription,
                 Image: articleImage,
                 Status: 'PENDING',
-                categoryID: categoryID,
+                // categoryID: categoryID,
             }
             console.log(newArticle);
         } else {

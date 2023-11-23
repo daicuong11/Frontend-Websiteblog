@@ -26,13 +26,13 @@ const ArtilceDetailsPage = () => {
         window.scrollTo({ top: 0, behavior: 'auto' });
     });
 
-    return (
+    return article && (
         <div className="mt-[66px] px-11">
             <div className="grid grid-cols-12">
                 <div className="col-span-3 sticky top-[66px] h-fit">
                     <div className="flex justify-end p-12 ml-auto">
                         <div>
-                            <Link className="text-base font-semibold text-black mt-5" to={"auth/info"}>
+                            <Link className="text-base font-semibold text-black mt-5" to={"/auth/info"}>
                                 {article ? article.user.name : 'Lý Đại Cương'}
                             </Link>
                             <hr className="min-w-[160px] mt-4"></hr>

@@ -33,16 +33,15 @@ const Content = ({ content, handleEditContent }) => {
         }
     }
 
-    return (
-
-        content && <div className={`main-content relative ${showModalEditContent ? 'border-2 border-black' : ''} content-article flex-col mt-5 hover:border-2 hover:border-gray-500 rounded-lg`}>
-            {content.title.trim() !== '' && <h3 className="text-xl font-bold my-5">{content.title}</h3>}
-            {content.body.trim() !== '' && <p dangerouslySetInnerHTML={{ __html: contentBody.replace(/\n/g, '<br/>') }} className="text-lg my-[6px] leading-8"></p>}
+    return content && (
+        <div className={`main-content relative ${showModalEditContent ? 'border-2 border-black' : ''} content-article flex-col mt-5 hover:border-2 hover:border-gray-500 rounded-lg`}>
+            {content.title && <h3 className="text-xl font-bold my-5">{content.title}</h3>}
+            {content.body && <p dangerouslySetInnerHTML={{ __html: contentBody.replace(/\n/g, '<br/>') }} className="text-lg my-[6px] leading-8"></p>}
             {
                 content.image &&
-                    <div>
-                        <img alt="" src={URL.createObjectURL(content.image)} className="w-full mt-8 mb-10" />
-                    </div>
+                <div>
+                    <img alt="" src={URL.createObjectURL(content.image)} className="w-full mt-8 mb-10" />
+                </div>
             }
             <div onClick={() => setShowModalEditContent(!showModalEditContent)} className={`${showModalEditContent ? 'show' : ''} btn-edit-content hidden absolute top-0 right-0`}>
                 <button className="px-2 py-1">
