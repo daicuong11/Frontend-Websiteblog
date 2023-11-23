@@ -4,11 +4,11 @@ import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 import { useContext } from "react";
-import { MyContext } from "../context/MyContextProvider";
+import { MyContext, useMycontext } from "../context/MyContextProvider";
 import { toast } from "react-toastify";
 
 const NewPostContent = () => {
-    const { listDataContent, setListDataContent } = useContext(MyContext);
+    const { listDataContent, setListDataContent } = useMycontext();
     // const [listDataContent, setListDataContent] = useState([]);
     const [showAddContent, setShowAddContent] = useState(false);
     const [indexContent, setIndexContent] = useState(1);

@@ -3,7 +3,6 @@ import React from 'react';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import HomeLayout from './layouts/home/HomeLayout';
 import HomePage from './pages/home/HomePage';
-import Login from './components/Login';
 import UserManagement from './pages/admin/UserManagement';
 import ArticleDetailsPage from './pages/article_details/ArticleDetailsPage';
 import NotFound from './components/project/not_found/NotFound';
@@ -16,12 +15,10 @@ import { MyContextProvider } from './components/project/context/MyContextProvide
 function App() {
   return (
     <MyContextProvider>
-
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<HomeLayout />}>
             <Route index element={<HomePage />} />
-            <Route path='/login' element={<Login />} />
             <Route path='/article/:articleID' element={<ArticleDetailsPage />} />
           </Route>
           <Route path='/' element={<NewPostLayout />}>

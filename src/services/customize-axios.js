@@ -4,9 +4,9 @@ const getToken = () => {
   return localStorage.getItem("token");
 };
 
-const delToken = () => {
-  return localStorage.removeItem("token");
-};
+// const delToken = () => {
+//   return localStorage.removeItem("token");
+// };
 
 const instance = axios.create({
   baseURL: 'https://localhost:7020/',
@@ -32,10 +32,13 @@ instance.interceptors.response.use(
   },
   function (error) {
     if (error.response && error.response.status === 401) {
-      // Nếu mã lỗi là 401, chuyển hướng đến trang login
-      delToken();
-      window.location.href = '/login';
+      return {
+        status: false,
+        message: 'Authentication failed',
+        data: ''
+      }
     }
+    return error.response.data;
     return Promise.reject(error);
   }
 );
