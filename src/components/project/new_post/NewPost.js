@@ -3,8 +3,7 @@ import Content from "../article_content/Content";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalAbsolute from "../../modal/ModalAbsolute";
-import { useContext } from "react";
-import { MyContext, useMycontext } from "../context/MyContextProvider";
+import { useMycontext } from "../context/MyContextProvider";
 import { toast } from "react-toastify";
 
 const NewPostContent = () => {
@@ -25,7 +24,7 @@ const NewPostContent = () => {
         handleCloseAddContent();
         // Add the entered content to the list
         if (contentTitle.trim() === '' && contentBody.trim() === '' && !contentImage) {
-            toast.error('không tạo')
+            // toast.error('không tạo')
             return;
         }
         const newContent = {
@@ -48,7 +47,7 @@ const NewPostContent = () => {
 
     const handleEditContent = (content) => {
         if (content.title.trim() === '' && content.body.trim() === '' && !content.image) {
-            toast.error('Xóa content');
+            // toast.error('Xóa content');
             const newListDataContent = listDataContent.filter(c => c.id !== content.id);
             setListDataContent(newListDataContent);
         } else {
@@ -56,7 +55,26 @@ const NewPostContent = () => {
             setListDataContent(newListDataContent);
         }
     };
-    
+
+    // handle hiển thị modal add content bên trên nút + khi nằm ở dưới screen
+    const [isVisitBelow, setIsVisitBelow] = useState(false);
+    function isElementBelowHalfViewport(element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        // Kiểm tra xem phần tử có nằm dưới 50% chiều cao của cửa sổ không
+        return rect.top > windowHeight / 2;
+    }
+
+    const handleSetVisitModal = (element) => {
+        const isbelow = isElementBelowHalfViewport(element);
+        if(isbelow) {
+            setIsVisitBelow(true)
+        }
+        else {
+            setIsVisitBelow(false);
+        }
+    }
 
     // console.log('listDataContent', listDataContent)
 
@@ -74,15 +92,15 @@ const NewPostContent = () => {
                     ))}
                 </div>
                 <div className="mt-5 relative">
-                    <button onClick={() => { setShowAddContent(!showAddContent); handleClearContent(); }} className="w-11 h-11 bg-blue-600 rounded-full cursor-pointer hover:text-xl transition-all">
+                    <button id="yourElementId" onClick={(e) => { setShowAddContent(!showAddContent); handleClearContent(); handleSetVisitModal(e.target)}} className="w-11 h-11 bg-blue-600 rounded-full cursor-pointer hover:text-xl transition-all">
                         {showAddContent ? <FontAwesomeIcon color="white" size="xl" icon={faXmark} /> : <FontAwesomeIcon color="white" icon={faPlus} />}
                     </button>
                     <ModalAbsolute
-                        className={'w-[652px] top-[60px] left-[0px] z-[1000] bg-white'}
+                        className={`w-[652px] ${ isVisitBelow ? 'bottom-16 left-[0px]' : 'top-[60px] left-[0px]'} z-[1000] bg-white`}
                         onOpen={showAddContent}
                         onClose={handleCloseAddContent}
                         showIconClose={true}
-                        modalHead={(<div className="text-center font-semibold">
+                        modalHead={(<div className="text-center font-semibold text-xl">
                             Thêm nội dung
                         </div>)}
                         modalBody={(<div className="px-4">
@@ -90,7 +108,7 @@ const NewPostContent = () => {
                             <div className="mb-5">
                                 <div className="my-5">
                                     <div className="font-semibold">Tiêu đề</div>
-                                    <input type="text" value={contentTitle} onChange={(e) => setContentTitle(e.target.value)} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded focus:border-orange-500" />
+                                    <input type="text" value={contentTitle} onChange={(e) => setContentTitle(e.target.value)} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded-md focus:border-orange-500" />
                                 </div>
                                 <div className="my-5">
                                     <div className="font-semibold">Nội dung</div>
@@ -99,13 +117,13 @@ const NewPostContent = () => {
                                         type="text"
                                         value={contentBody}
                                         onChange={(e) => setContentBody(e.target.value)}
-                                        className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded focus:border-orange-500"
+                                        className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded-md focus:border-orange-500"
                                     />
 
                                 </div>
                                 <div className="mt-5">
                                     <div className="font-semibold">Hình ảnh</div>
-                                    <input type="file" accept="image/*" className="w-full border-2" onChange={(e) => setContentImage(e.target.files[0])} />
+                                    <input type="file" accept="image/*" className="w-full border-2 rounded-md py-0.5 px-0.5 cursor-pointer" onChange={(e) => setContentImage(e.target.files[0])} />
                                 </div>
 
                                 <div className="mt-5">

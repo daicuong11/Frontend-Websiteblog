@@ -4,11 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { fetchGetArticleById } from "../../services/ArticleService";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
 
 
 const ArtilceDetailsPage = () => {
     const { articleID } = useParams();
     const [article, setArticle] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    setTimeout(() => {
+        setIsLoading(false)
+    }, 1000);
+
+
 
     //get article by id
     const getArticleByID = async (id) => {
@@ -26,6 +34,15 @@ const ArtilceDetailsPage = () => {
         window.scrollTo({ top: 0, behavior: 'auto' });
     });
 
+    if (isLoading) {
+        return (
+            <div className='fixed top-[50%] left-[50%]'>
+                <div className='flex items-center justify-center'>
+                    <LoadingSpinner className={'w-6 h-6'} />
+                </div>
+            </div>
+        )
+    }
     return article && (
         <div className="mt-[66px] px-11">
             <div className="grid grid-cols-12">

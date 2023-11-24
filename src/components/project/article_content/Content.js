@@ -54,7 +54,7 @@ const Content = ({ content, handleEditContent }) => {
                 onOpen={showModalEditContent}
                 onClose={handleCloseModalEditContent}
                 showIconClose={true}
-                modalHead={(<div className="text-center font-semibold">
+                modalHead={(<div className="text-center font-semibold text-xl">
                     Chỉnh sửa nội dung
                 </div>)}
                 modalBody={(<div className="px-4">
@@ -62,7 +62,7 @@ const Content = ({ content, handleEditContent }) => {
                     <div className="mb-5">
                         <div className="my-5">
                             <div className="font-semibold">Tiêu đề</div>
-                            <input type="text" value={contentTitle} onChange={(e) => setContentTitle(e.target.value)} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded focus:border-orange-500" />
+                            <input type="text" value={contentTitle} onChange={(e) => setContentTitle(e.target.value)} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded-md focus:border-orange-500" />
                         </div>
                         <div className="my-5">
                             <div className="font-semibold">Nội dung</div>
@@ -71,7 +71,7 @@ const Content = ({ content, handleEditContent }) => {
                                 type="text"
                                 value={contentBody}
                                 onChange={(e) => setContentBody(e.target.value)}
-                                className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded focus:border-orange-500"
+                                className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded-md focus:border-orange-500"
                             />
 
                         </div>
@@ -85,7 +85,7 @@ const Content = ({ content, handleEditContent }) => {
                                     </button>
                                 </label>
                             </div>
-                            <input type="file" accept="image/*" className="w-full border-2" onChange={(e) => setContentImage(e.target.files[0])} />
+                            <input type="file" accept="image/*" className="w-full border-2 rounded-md py-0.5 px-0.5 cursor-pointer" onChange={(e) => setContentImage(e.target.files[0])} />
                         </div>
 
 

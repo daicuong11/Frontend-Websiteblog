@@ -3,6 +3,8 @@ import Footer from '../../components/partials/Footer';
 import { Outlet } from 'react-router-dom';
 import { useMycontext } from '../../components/project/context/MyContextProvider';
 import { useEffect } from 'react';
+import LoadingSpinner from '../../components/loading/LoadingSpinner';
+import { useState } from 'react';
 
 const NewPostLayout = () => {
     const { currentUser, setCurrentUser, listDataContent, setListDataContent, isModalOpenLogin, setIsModalOpenLogin, isUnauthorized, setUnauthorized, resetUnauthorized } = useMycontext();
@@ -25,7 +27,9 @@ const NewPostLayout = () => {
     return (
         <>
             <Header isShowBtnPublish={true} />
+            <div className=''>
             <Outlet />
+            </div>
             <Footer />
         </>
     );

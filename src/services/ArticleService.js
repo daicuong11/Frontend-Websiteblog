@@ -32,10 +32,15 @@ const fetchCreateNewArticle = (title, description, articleImage, status, userID,
     });
 }
 
+const fetchSearchArticleBySearchKey = (searchKey) => {
+    return axios.get(`api/articles/search?searchKey=${searchKey}`);
+}
+
 export {
     fetchGetAllArticle,
     fetchGetAllArticleByCategoryID,
     fetchGetArticleById,
     fetchGetAllArticleByUserID,
-    fetchCreateNewArticle
+    fetchCreateNewArticle,
+    fetchSearchArticleBySearchKey
 };

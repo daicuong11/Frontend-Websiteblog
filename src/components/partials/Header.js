@@ -165,14 +165,14 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                 handleLogin();
             } else {
                 // Form is not valid, handle accordingly (e.g., show error messages)
-                console.log('Form đăng nhập bị lỗi');
+
             }
         }
         else {
             if (isFullNameValid && isUserNameValid && isPasswordValid && isComfPasswordValid) {
                 toast.success('Đăng ký')
             } else {
-                console.log('Form đăng ký bị lỗi');
+
             }
         }
     };
@@ -284,6 +284,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                 setListDataContent([]);
                 toast.success('Xuất bản thành công');
                 handleCloseModalCreateNewArticle();
+                navigate(`/article/${newArticleID}`);
                 return;
             }
             toast.error('Xuất bản thất bại');
@@ -356,8 +357,8 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                     <MyModal
                                         onOpen={showModalCreateArticle}
                                         onClose={handleCloseModalCreateNewArticle}
-                                        className={'w-[652px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] z-[1000] bg-white'}
-                                        modalHead={(<div className="text-center font-semibold">
+                                        className={'w-[652px] left-[calc(50%-652px/2)] transition-all top-[calc(20%/2)] z-[1000] bg-white'}
+                                        modalHead={(<div className="text-center font-semibold text-xl">
                                             Tạo bài viết
                                         </div>)}
                                         modalBody={(<div className="px-4">
@@ -365,7 +366,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                             <div className="mb-5">
                                                 <div className="my-5">
                                                     <div className="font-semibold">Tên bài viết</div>
-                                                    <input type="text" value={articleTitle} onChange={(e) => { setArticleTitle(e.target.value); setTitleError(''); }} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded focus:border-orange-500" />
+                                                    <input type="text" value={articleTitle} onChange={(e) => { setArticleTitle(e.target.value); setTitleError(''); }} className="w-full mt-2 border-2 px-[16px] py-[6px] rounded-md focus:border-orange-500" />
                                                     <div className="text-red-500 text-sm">{titleError}</div>
                                                 </div>
                                                 <div className="my-5">
@@ -375,7 +376,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                         type="text"
                                                         value={articleDescription}
                                                         onChange={(e) => { setArticleDescription(e.target.value); setDescriptionError(''); }}
-                                                        className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded focus:border-orange-500"
+                                                        className="w-full mt-2 border-2 px-[16px] py-[6px] h-auto rounded-md focus:border-orange-500"
                                                     />
                                                     <div className="text-red-500 text-sm">{descriptionError}</div>
                                                 </div>
@@ -541,7 +542,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                 onOpen={isModalOpenLogin}
                                 onClose={handleCloseModal}
                                 showIconClose={true}
-                                className={'left-[50%] transition-all -translate-x-[50%] -translate-y-[50%] top-[50%] min-w-[500px] bg-white'}
+                                className={'left-[calc(50%-500px/2)] transition-all top-[calc(20%/2)] min-w-[500px] bg-white'}
                                 modalHead={<div></div>}
                                 modalBody={
                                     isModalOpenRegister ?
