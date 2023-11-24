@@ -30,7 +30,7 @@ const MySearch = () => {
 
     //handle close modal search result
     const handleOpenModalSearchResult = async (value) => {
-        console.log(value);
+
         if (value.length === 0) {
             setListArticleBySearch([]);
             handleCloseModalSearchResult();
@@ -40,12 +40,15 @@ const MySearch = () => {
         } else {
             setIsOpenModalSearchResult(true);
             setIsLoading(true);
-
-            let res = await fetchSearchArticleBySearchKey(value);
-            if (res.status === true) {
-                setListArticleBySearch(res.data);
+            if (value.trim().length === 0) {
+                setIsOpenModalSearchResult(true);
             }
-
+            else {
+                let res = await fetchSearchArticleBySearchKey(value);
+                if (res.status === true) {
+                    setListArticleBySearch(res.data);
+                }
+            }
             setIsLoading(false);
         }
     };
@@ -98,7 +101,7 @@ const MySearch = () => {
                             {
                                 listArticleBySearch.map((article, index) => {
                                     return (
-                                        <div key={index} onClick={() => navigate(`/article/${article.articleID}`)} className='flex items-center py-2 cursor-pointer'>
+                                        <div key={index} onClick={() => window.location.href.includes('/article/') ? window.location.href = `/article/${article.articleID}` : navigate(`/article/${article.articleID}`)} className='flex items-center py-2 cursor-pointer'>
                                             <div>
                                                 <img alt='' src={`https://localhost:7020/api/images/${article.imagePath}`}
                                                     className='w-8 h-8 min-w-[32px] min-h-[32px] rounded-full object-cover' />

@@ -8,14 +8,14 @@ import ArticleCardXL from "../../project/article/ArticleCardXL";
 import ListArticleSM from "../../project/list_article/ListArticleSM";
 import MyPanigation from "../../project/panigation/MyPanigation";
 
-import { fetchGetAllArticle, fetchGetAllArticleByCategoryID } from "../../../services/ArticleService";
+import { fetchGetAllArticle, fetchGetAllArticleByCategoryID, fetchGetAllArticleFavourite, fetchGetAllArticleLatest, fetchGetAllArticleOthers } from "../../../services/ArticleService";
 import { useContext, useEffect, useState } from "react";
 
 const listCategoryDes = {
     "Blog": 'Tổng hợp các blog chia sẻ về kinh nghiệm tự học và cuộc sống.',
     "Giải trí": 'Tổng hợp các bài viết giải trí vui vẻ.',
     "Mới nhất": 'Tổng hợp các bài viết mới nhất.',
-    "Đọc nhiều nhất": 'Tổng hợp các bài viết đọc nhiều nhất.',
+    "Yêu thích nhiều nhất": 'Tổng hợp các bài viết được yêu thích nhiều nhất.',
     "Others": 'Tổng hợp các bài viết khác',
 
 }
@@ -61,56 +61,21 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
         }
     }
 
-    // Lấy tất cả article mới nhất, đọc nhiều nhất, khác
+    // Lấy tất cả article mới nhất, yêu thích nhất, khác
     const getListArticlesByOptions = async (optionSelected, pageNumber, pageSize = 10) => {
         let res;
         if (optionSelected === -2) {
             // Lấy mới nhất
-            res = {
-                "status": true,
-                "message": "List of articles latest",
-                "data": [],
-                "pageNumber": 0,
-                "pageSize": 10,
-                "totalItems": 0,
-                "totalPages": 0,
-                "firstPageUrl": null,
-                "lastPageUrl": null,
-                "prevPageUrl": null,
-                "nextPageUrl": null
-            }
+            res = await fetchGetAllArticleLatest(pageNumber, pageSize);
         }
         else if (optionSelected === -3) {
-            // Lấy đọc nhiều nhất
-            res = {
-                "status": true,
-                "message": "List of articles viewest",
-                "data": [],
-                "pageNumber": 0,
-                "pageSize": 10,
-                "totalItems": 0,
-                "totalPages": 0,
-                "firstPageUrl": null,
-                "lastPageUrl": null,
-                "prevPageUrl": null,
-                "nextPageUrl": null
-            }
+            // Lấy yêu thích nhất
+            res = await fetchGetAllArticleFavourite(pageNumber, pageSize);
+
         }
         else if (optionSelected === -4) {
             // Lấy khác
-            res = {
-                "status": true,
-                "message": "List of articles others",
-                "data": [],
-                "pageNumber": 0,
-                "pageSize": 10,
-                "totalItems": 0,
-                "totalPages": 0,
-                "firstPageUrl": null,
-                "lastPageUrl": null,
-                "prevPageUrl": null,
-                "nextPageUrl": null
-            }
+            res = await fetchGetAllArticleOthers(pageNumber, pageSize);
         }
 
         if (res && res.status === true) {
@@ -234,8 +199,8 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                                 <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -2, categoryName: 'Mới nhất' }, 1)} className="mr-2 mb-2 inline-block">
                                     <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Mới nhất</div>
                                 </li>
-                                <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -3, categoryName: 'Đọc nhiều nhất' }, 1)} className="mr-2 mb-2 inline-block">
-                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Đọc nhiều nhất</div>
+                                <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -3, categoryName: 'Yêu thích nhiều nhất' }, 1)} className="mr-2 mb-2 inline-block">
+                                    <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Yêu thích nhất</div>
                                 </li>
                                 <li onClick={() => handleSetCategoryAndPageNumber({ categoryID: -4, categoryName: 'Others' }, 1)} className="mr-2 mb-2 inline-block">
                                     <div className="px-4 py-[6px] cursor-pointer text-sm font-semibold text-black bg-gray-100 rounded-full" to={"/"}>Others</div>

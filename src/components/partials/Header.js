@@ -14,6 +14,7 @@ import { fetchGetUserByJWT, fetchLogin } from "../../services/AuthService";
 import { fetchGetAllCategory } from "../../services/CategoryService";
 import axiosInstance from "../../services/customize-axios";
 import { fetchCreateNewContent } from "../../services/ContentService";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
 const Categorys = {
     blog: "blog",
@@ -48,7 +49,6 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
             return;
         }
         toast.error(res.message);
-        handleCloseModal(false);
     };
 
     const handleLogout = () => {

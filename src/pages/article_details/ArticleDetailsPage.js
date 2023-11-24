@@ -5,16 +5,20 @@ import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { fetchGetArticleById } from "../../services/ArticleService";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
+import { useMycontext } from "../../components/project/context/MyContextProvider";
+import { fetchLoveArticle } from "../../services/LoveService";
 
 
 const ArtilceDetailsPage = () => {
+    const { currentUser, setCurrentUser, isModalOpenLogin, setIsModalOpenLogin, isUnauthorized, setUnauthorized, resetUnauthorized } = useMycontext();
     const { articleID } = useParams();
     const [article, setArticle] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoved, setIsLoves] = useState(false);
 
     setTimeout(() => {
         setIsLoading(false)
-    }, 1000);
+    }, 500);
 
 
 
@@ -23,25 +27,50 @@ const ArtilceDetailsPage = () => {
         let res = await fetchGetArticleById(id);
         if (res.status === true) {
             setArticle(res.data);
+            if(currentUser && currentUser.userID){
+                const loved = res.data.loves.find(l => l.userTargetID == currentUser.userID)
+                if(loved) {
+                    setIsLoves(true);
+                }
+                else {
+                    setIsLoves(false);
+                }
+            }
         }
     }
 
     useEffect(() => {
         getArticleByID(articleID);
-    }, [articleID]);
+    }, [isUnauthorized, isLoved]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'auto' });
+        handleLoading();
     });
 
-    if (isLoading) {
-        return (
-            <div className='fixed top-[50%] left-[50%]'>
-                <div className='flex items-center justify-center'>
-                    <LoadingSpinner className={'w-6 h-6'} />
+    //handle love article
+    const handleLoveArticle = async () => {
+        if(isUnauthorized){
+            setIsModalOpenLogin(true);
+        }
+        else {
+            let res = await fetchLoveArticle(currentUser.userID, article.articleID);
+            if(res.status == true) {
+                setIsLoves(!isLoved);
+            }
+        }
+    }
+
+    const handleLoading = () => {
+        if (isLoading) {
+            return (
+                <div className='fixed top-[50%] left-[50%]'>
+                    <div className='flex items-center justify-center'>
+                        <LoadingSpinner className={'w-6 h-6'} />
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
     return article && (
         <div className="mt-[66px] px-11">
@@ -54,9 +83,9 @@ const ArtilceDetailsPage = () => {
                             </Link>
                             <hr className="min-w-[160px] mt-4"></hr>
                             <div className="flex mt-6">
-                                <div className="cursor-pointer ml-2 flex justify-center items-center text-gray-400 hover:text-gray-500" title="Nhấn để yêu thích bài này">
-                                    <FontAwesomeIcon size="lg" icon={faHeart} />
-                                    <span className="ml-2 text-base">12</span>
+                                <div onClick={() => handleLoveArticle()} className="cursor-pointer ml-2 flex justify-center items-center text-gray-400 hover:text-gray-500" title="Nhấn để yêu thích bài này">
+                                    <FontAwesomeIcon className={`${isLoved ? 'text-red-500' : ''}`} size="lg" icon={faHeart} />
+                                    <span className="ml-2 text-base">{article.loves.length}</span>
                                 </div>
                                 <div className="cursor-pointer ml-8 flex justify-center items-center text-gray-400 hover:text-gray-500" title="Nhấn để bình luận bài viết">
                                     <FontAwesomeIcon size="lg" icon={faComment} />

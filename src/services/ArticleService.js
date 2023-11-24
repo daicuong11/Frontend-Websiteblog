@@ -4,6 +4,18 @@ const fetchGetAllArticle = (pageNumber, pageSize) => {
     return axios.get(`api/articles?pageNumber=${pageNumber}&pageSize=${pageSize}`);
 }
 
+const fetchGetAllArticleLatest = (pageNumber, pageSize) => {
+    return axios.get(`api/articles/latest?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+}
+
+const fetchGetAllArticleFavourite = (pageNumber, pageSize) => {
+    return axios.get(`api/articles/favourite?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+}
+
+const fetchGetAllArticleOthers = (pageNumber, pageSize) => {
+    return axios.get(`api/articles/others?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+}
+
 const fetchGetArticleById = (id) => {
     return axios.get(`api/articles/${id}`);
 }
@@ -42,5 +54,8 @@ export {
     fetchGetArticleById,
     fetchGetAllArticleByUserID,
     fetchCreateNewArticle,
-    fetchSearchArticleBySearchKey
+    fetchSearchArticleBySearchKey,
+    fetchGetAllArticleLatest,
+    fetchGetAllArticleFavourite,
+    fetchGetAllArticleOthers
 };
