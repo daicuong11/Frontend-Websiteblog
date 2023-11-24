@@ -16,4 +16,26 @@ const fetchGetAllArticleByUserID = (id, pageNumber, pageSize) => {
     return axios.get(`api/articles/user/${id}`);
 }
 
-export { fetchGetAllArticle, fetchGetAllArticleByCategoryID, fetchGetArticleById, fetchGetAllArticleByUserID };
+const fetchCreateNewArticle = (title, description, articleImage, status, userID, categoryID) => {
+    const formData = new FormData();
+    formData.append('Title', title);
+    formData.append('Description', description);
+    formData.append('Image', articleImage);
+    formData.append('Status', status);
+    formData.append('UserID', userID);
+    formData.append('CategoryID', categoryID);
+
+    return axios.post(`api/articles`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
+export {
+    fetchGetAllArticle,
+    fetchGetAllArticleByCategoryID,
+    fetchGetArticleById,
+    fetchGetAllArticleByUserID,
+    fetchCreateNewArticle
+};

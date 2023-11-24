@@ -85,7 +85,7 @@ const ArtilceDetails = ({ article }) => {
 
                 {/*render content */}
                 {article &&
-                    article.contents.map((content, index) => {
+                    article.contents.sort((a, b) => a.contentIndex - b.contentIndex).map((content, index) => {
                         return (
                             <ContentIsShow
                                 key={index}

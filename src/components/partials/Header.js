@@ -7,13 +7,18 @@ import MyModal from "../../components/modal/MyModal";
 import { useEffect, useState } from "react";
 import ArticleCard from "../project/article/ArticleCard";
 import NotifyCard from "../project/notify/NotifyCard";
-import { fetchGetAllArticleByUserID } from "../../services/ArticleService";
+import { fetchCreateNewArticle, fetchGetAllArticleByUserID } from "../../services/ArticleService";
 import { useMycontext } from "../project/context/MyContextProvider";
 import { toast } from "react-toastify";
 import { fetchGetUserByJWT, fetchLogin } from "../../services/AuthService";
 import { fetchGetAllCategory } from "../../services/CategoryService";
 import axiosInstance from "../../services/customize-axios";
+import { fetchCreateNewContent } from "../../services/ContentService";
 
+const Categorys = {
+    blog: "blog",
+    entertainment: 'Giải trí'
+}
 const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const navigate = useNavigate();
     const { currentUser, setCurrentUser, listDataContent, setListDataContent, isModalOpenLogin, setIsModalOpenLogin, isUnauthorized, setUnauthorized, resetUnauthorized } = useMycontext();
@@ -34,15 +39,25 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
 
     const handleLogin = async () => {
         let res = await fetchLogin(userName, password);
-        if (res.status){
+        if (res.status) {
             localStorage.setItem('token', res.data.token);
             resetUnauthorized();
+            setCurrentUser(res.data.user);
             toast.success(`Xin chào ${res.data.user.name}`);
             handleCloseModal();
             return;
         }
         toast.error(res.message);
         handleCloseModal(false);
+    };
+
+    const handleLogout = () => {
+        if (localStorage.getItem('token'))
+            localStorage.removeItem('token');
+        setUnauthorized();
+        setCurrentUser(null);
+        // toast.success(`Đăng xuất thành công`);
+        handleOnCloseOptions();
     };
 
     const handleCloseModal = () => {
@@ -60,19 +75,12 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const [articleImage, setArticleImage] = useState('');
 
     //category
-    // useEffect(() => {
-    //     getListCategory();
-    // }, []);
 
-    // // Lấy danh sách categories từ database
-    // const getListCategory = async () => {
-    //     let res = await fetchGetAllCategory();
-    //     setListCategory(res.data);
-    // }
-
-    // const categoryID = listCategory.find(c => c.categoryName.toLowerCase() === window.location.href.split('/').pop())?.categoryID;
-    // // console.log(categoryID);
-
+    // Lấy danh sách categories từ database
+    const getListCategory = async () => {
+        let res = await fetchGetAllCategory();
+        setListCategory(res.data);
+    }
     //validator
     const [fullName, setFullName] = useState('');
     const [userName, setUserName] = useState('');
@@ -205,6 +213,8 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
         if (currentUser && currentUser.userID) {
             getListArticlesByUserID(currentUser.userID);
         }
+        //get categories
+        getListCategory();
     }, [isOpenMyArticle]);
 
     //Lấy tất cả Article của user 
@@ -241,18 +251,46 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
         const isDescriptionValid = validateDescription();
         const isImageValid = validateImage();
 
+        //value
+        console.log(currentUser)
+        const categoryID = listCategory.find(c => c.categoryName.toLowerCase() === Categorys[window.location.href.split('/').pop()].toLowerCase())?.categoryID;
+
         if (isTitleValid && isDescriptionValid && isImageValid) {
-            toast.success('Xuất bản thành công');
+            if (!categoryID) {
+                toast.success('Xuất bản thất bại do categoryID');
+                handleCloseModalCreateNewArticle();
+                return;
+            }
+            else if (!currentUser.userID) {
+                toast.success('Xuất bản thất bại do userID', currentUser.userID);
+                handleCloseModalCreateNewArticle();
+                return;
+            }
+
             const newArticle = {
                 Title: articleTitle,
                 Description: articleDescription,
                 Image: articleImage,
                 Status: 'PENDING',
-                // categoryID: categoryID,
+                categoryID: categoryID,
+                content: listDataContent
             }
-            console.log(newArticle);
+            let res = await fetchCreateNewArticle(articleTitle, articleDescription, articleImage, 'PENDING', currentUser.userID, categoryID);
+            if (res.status === true) {
+                const newArticleID = res.data.articleID;
+                await listDataContent.forEach(async content => {
+                    let response = await fetchCreateNewContent(content.title, content.body, content.image, content.id, newArticleID);
+                })
+                setListDataContent([]);
+                toast.success('Xuất bản thành công');
+                handleCloseModalCreateNewArticle();
+                return;
+            }
+            toast.error('Xuất bản thất bại');
+            handleCloseModalCreateNewArticle();
+            // console.log(newArticle);
         } else {
-
+            // handleCloseModalCreateNewArticle();
         }
     };
 
@@ -318,7 +356,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                     <MyModal
                                         onOpen={showModalCreateArticle}
                                         onClose={handleCloseModalCreateNewArticle}
-                                        className={'w-[652px] top-[80px] left-[50%] -translate-x-[50%] -translate-y-[50%] z-[1000] bg-white'}
+                                        className={'w-[652px] top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] z-[1000] bg-white'}
                                         modalHead={(<div className="text-center font-semibold">
                                             Tạo bài viết
                                         </div>)}
@@ -481,7 +519,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                 <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Cài đặt</button>
                                             </div>
                                             <div className="mb-2">
-                                                <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đăng xuất</button>
+                                                <button onClick={() => handleLogout()} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đăng xuất</button>
                                             </div>
                                         </div>
                                     }
