@@ -3,6 +3,7 @@ import { fetchGetAllCategory } from "../../services/CategoryService";
 import "./HomePage.scss";
 import MainContent from "../../components/project/home/MainContent";
 import { useMycontext } from "../../components/project/context/MyContextProvider";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
 
 
 
@@ -11,6 +12,10 @@ const HomePage = () => {
     const {listCategory, setListCategory} = useMycontext();
     const [pageNumber, setPageNumber] = useState(1);
 
+    const [isLoading, setIsLoading] = useState(true);
+    setTimeout(() => {
+        setIsLoading(false)
+    }, 500);
 
     const handleSetCategoryAndPageNumber = (category, pageNumber) => {
         setCategorySelected(category);
@@ -20,20 +25,35 @@ const HomePage = () => {
     const handleSetPageNumber = (pageNumber) => {
         setPageNumber(pageNumber);
     }
-
+    
     useEffect(() => {
         getListCategory();
     }, []);
-
+    
     // Lấy danh sách categories từ database
     const getListCategory = async () => {
         let res = await fetchGetAllCategory();
         setListCategory(res.data);
     }
-
+    
     //console.log(categorySelected);
     //console.log('list categories', listCategory)
     //console.log('list paginationInfo', paginationInfo);
+
+    useEffect(() => {
+        handleLoading();
+    });
+    const handleLoading = () => {
+        if (isLoading) {
+            return (
+                <div className='fixed top-[50%] left-[50%]'>
+                    <div className='flex items-center justify-center'>
+                        <LoadingSpinner className={'w-6 h-6'} />
+                    </div>
+                </div>
+            )
+        }
+    }
 
     return (<>
         <div id="content" className="mt-[66px]">

@@ -65,18 +65,19 @@ const MySearch = () => {
                     <FontAwesomeIcon className='text-slate-500' size='lg' icon={faMagnifyingGlass} />
                 </div>
                 <input
-                    onFocus={() => setOnFocus(true)}
+                    onFocus={() => {setOnFocus(true); handleOpenModalSearchResult(valueSearch)}}
                     onBlur={() => setOnFocus(false)}
                     value={valueSearch}
                     onChange={(event) => { setValueSearch(event.target.value); handleOpenModalSearchResult(event.target.value); }}
                     type='text' className='text-sm search-input h-full px-1 outline-none grow' placeholder='Tìm kiếm bài viết, tác giả,...' />
-                {valueSearch.length > 0 && (<div onClick={() => { setValueSearch(''); handleCloseModalSearchResult(); }} className='py-2 pl-1 flex justify-center items-center cursor-pointer'>
+                {valueSearch.length > 0 && (<div onClick={() => { setValueSearch(''); handleCloseModalSearchResult(); }} className='py-2 pl-1 flex justify-center items-center cursor-pointer z-[9999999]'>
                     <FontAwesomeIcon className='text-slate-500' size='sm' icon={faXmark} />
                 </div>)}
             </div>
         </div>
 
         <MyModal
+            isScroll={true}
             onOpen={isOpenModalSearchResult}
             onClose={handleCloseModalSearchResult}
             className={'w-[420px] left-[calc(50%-420px/2)] transition-all top-[60px] z-[1000] bg-white'}
@@ -93,7 +94,7 @@ const MySearch = () => {
             modalBody={
                 listArticleBySearch && listArticleBySearch.length > 0 &&
                 (
-                    <div className='px-5'>
+                    <div className='px-5 overflow-y-auto max-h-[460px]'>
                         <div className='font-semibold uppercase text-sm mb-2'>Bài viết</div>
                         <hr />
                         <div className='flex-col my-2'>
@@ -101,7 +102,7 @@ const MySearch = () => {
                             {
                                 listArticleBySearch.map((article, index) => {
                                     return (
-                                        <div key={index} onClick={() => window.location.href.includes('/article/') ? window.location.href = `/article/${article.articleID}` : navigate(`/article/${article.articleID}`)} className='flex items-center py-2 cursor-pointer'>
+                                        <div key={index} onClick={() => { window.location.href.includes('/article/') ? window.location.href = `/article/${article.articleID}` : navigate(`/article/${article.articleID}`); handleCloseModalSearchResult(); }} className='flex items-center py-2 cursor-pointer'>
                                             <div>
                                                 <img alt='' src={`https://localhost:7020/api/images/${article.imagePath}`}
                                                     className='w-8 h-8 min-w-[32px] min-h-[32px] rounded-full object-cover' />

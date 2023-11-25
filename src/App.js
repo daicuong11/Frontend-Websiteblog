@@ -10,6 +10,7 @@ import NewPostPage from './pages/new_post/NewPostPage';
 import NewPostLayout from './layouts/new_post/NewPostLayout';
 import { ToastContainer } from 'react-toastify';
 import { MyContextProvider } from './components/project/context/MyContextProvider';
+import InfoPage from './pages/info/InfoPage';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path='/' element={<HomeLayout />}>
             <Route index element={<HomePage />} />
             <Route path='/article/:articleID' element={<ArticleDetailsPage />} />
+            <Route path='/user/info/:userID' element={<InfoPage />} />
           </Route>
           <Route path='/' element={<NewPostLayout />}>
             <Route path='/new_post/blog' element={<NewPostPage typePost={'blog'} />} />

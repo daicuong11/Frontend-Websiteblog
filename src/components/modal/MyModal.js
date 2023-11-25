@@ -1,8 +1,9 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./MyModal.scss";
+import { useEffect } from "react";
 
-const MyModal = ({ className, modalHead, textModalFoot, modalBody, onOpen, onClose, showIconClose, templateHead }) => {
+const MyModal = ({ className, modalHead, textModalFoot, modalBody, onOpen, onClose, showIconClose, templateHead, isScroll }) => {
 
     const handleBackdropClick = () => {
         onClose();
@@ -13,11 +14,26 @@ const MyModal = ({ className, modalHead, textModalFoot, modalBody, onOpen, onClo
         e.stopPropagation();
     };
 
+    // Toggle body overflow based on modal state
+    useEffect(() => {
+        if (!isScroll) {
+            if (onOpen) {
+                document.body.style.overflow = "hidden";
+            } else {
+                document.body.style.overflow = "auto";
+            }
+            // Cleanup effect
+            return () => {
+                document.body.style.overflow = "auto";
+            };
+        }
+    }, [onOpen]);
+
     return (
         <>
             {onOpen && (
                 <div
-                    className='my-modal fixed top-0 bottom-0 left-0 right-0 z-[1000000000]'
+                    className='my-modal fixed top-0 bottom-0 left-0 right-0 z-[10000]'
                     onClick={handleBackdropClick}
                 >
                     <div
@@ -28,8 +44,8 @@ const MyModal = ({ className, modalHead, textModalFoot, modalBody, onOpen, onClo
                             <div className={`w-full ${showIconClose ? 'mr-6' : ''}`}>{templateHead ? (<div className="flex justify-between items-center">
                                 <h1 className="text-lg font-semibold">{templateHead.title}</h1>
                                 <p className="text-sm text-orange-500 cursor-pointer py-1 px-2 rounded hover:bg-slate-100">{templateHead.action}</p>
-                            </div>) : modalHead 
-                                || <div>My modal</div>}</div>
+                            </div>) : modalHead
+                            || <div>My modal</div>}</div>
 
                             {showIconClose &&
                                 (

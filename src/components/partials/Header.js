@@ -10,11 +10,11 @@ import NotifyCard from "../project/notify/NotifyCard";
 import { fetchCreateNewArticle, fetchGetAllArticleByUserID } from "../../services/ArticleService";
 import { useMycontext } from "../project/context/MyContextProvider";
 import { toast } from "react-toastify";
-import { fetchGetUserByJWT, fetchLogin } from "../../services/AuthService";
+import { fetchGetUserByJWT, fetchLogin, fetchRegister } from "../../services/AuthService";
 import { fetchGetAllCategory } from "../../services/CategoryService";
-import axiosInstance from "../../services/customize-axios";
 import { fetchCreateNewContent } from "../../services/ContentService";
-import LoadingSpinner from "../loading/LoadingSpinner";
+import { fetchGetAllNotificationByUserTargetID } from "../../services/NotificationService";
+
 
 const Categorys = {
     blog: "blog",
@@ -29,22 +29,62 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const [myArticles, setMytArticles] = useState([]);
     const [showModalCreateArticle, setShowModalCreateArticle] = useState(false);
     const [listCategory, setListCategory] = useState([]);
+    const [listNotification, setListNotification] = useState([]);
 
-    //in lỗi
+    //Bài viết
+    const [articleTitle, setArticleTitle] = useState('');
+    const [articleDescription, setArticleDescription] = useState('');
+    const [articleImage, setArticleImage] = useState('');
+
+    //category
+    //validator
+    const [fullName, setFullName] = useState('');
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [comfPassword, setComfPassword] = useState('');
+
+    //error message
+    const [fullNameErorr, setFullNameErorr] = useState('');
+    const [userNameErorr, setUserNameErorr] = useState('');
+    const [passwordErorr, setPasswordErorr] = useState('');
+    const [comfPasswordErorr, setComfPasswordErorr] = useState('');
+    //validate xuất bản form
+    const [titleError, setTitleError] = useState('');
+    const [descriptionError, setDescriptionError] = useState('');
+    const [imageError, setImageError] = useState('');
+    //
     // console.log(isUnauthorized);
     // console.log(currentUser);
 
     //register
     const [isModalOpenRegister, setIsModalOpenRegister] = useState(false);
+
+    //
+    const handleRegister = async () => {
+        console.log({ fullName, userName, password })
+        let res = await fetchRegister(fullName, userName, password, 'GUEST');
+        if (res.status) {
+            toast.success(`Đăng ký tài khoản thành công`);
+            setIsModalOpenRegister(false);
+            return;
+        }
+        toast.error(res.message);
+    }
     //modal login
 
     const handleLogin = async () => {
         let res = await fetchLogin(userName, password);
         if (res.status) {
+            console.log(res)
             localStorage.setItem('token', res.data.token);
             resetUnauthorized();
             setCurrentUser(res.data.user);
-            toast.success(`Xin chào ${res.data.user.name}`);
+            const name = res.data.user.name;
+            toast.success(
+                <div>
+                    Xin chào <strong >{name}</strong>
+                </div>
+            );
             handleCloseModal();
             return;
         }
@@ -69,29 +109,11 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
 
     //close handle login
 
-    //Bài viết
-    const [articleTitle, setArticleTitle] = useState('');
-    const [articleDescription, setArticleDescription] = useState('');
-    const [articleImage, setArticleImage] = useState('');
-
-    //category
-
     // Lấy danh sách categories từ database
     const getListCategory = async () => {
         let res = await fetchGetAllCategory();
         setListCategory(res.data);
     }
-    //validator
-    const [fullName, setFullName] = useState('');
-    const [userName, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const [comfPassword, setComfPassword] = useState('');
-
-    //error message
-    const [fullNameErorr, setFullNameErorr] = useState('');
-    const [userNameErorr, setUserNameErorr] = useState('');
-    const [passwordErorr, setPasswordErorr] = useState('');
-    const [comfPasswordErorr, setComfPasswordErorr] = useState('');
 
     const clearErrorsFormLoginAndRegister = () => {
         setFullNameErorr('');
@@ -122,7 +144,11 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     };
     const validateUserName = () => {
         if (userName.trim() === '') {
-            setUserNameErorr('Tên người dùng không được để trống');
+            setUserNameErorr('Tên tài khoản không được để trống');
+            return false;
+        }
+        else if (userName.trim().length < 5) {
+            setUserNameErorr('Tên tài khoản phải có ít nhất 5 ký tự');
             return false;
         }
         // Add more conditions for username validation if needed
@@ -170,17 +196,13 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
         }
         else {
             if (isFullNameValid && isUserNameValid && isPasswordValid && isComfPasswordValid) {
-                toast.success('Đăng ký')
+                handleRegister();
             } else {
 
             }
         }
     };
 
-    //validate xuất bản form
-    const [titleError, setTitleError] = useState('');
-    const [descriptionError, setDescriptionError] = useState('');
-    const [imageError, setImageError] = useState('');
 
     const validateTitle = () => {
         if (articleTitle.trim() === '') {
@@ -212,10 +234,12 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     useEffect(() => {
         if (currentUser && currentUser.userID) {
             getListArticlesByUserID(currentUser.userID);
+            getAllNotificationByUserTargetID(currentUser.userID);
+            getAllNotificationByUserTargetID(currentUser.userID);
         }
         //get categories
         getListCategory();
-    }, [isOpenMyArticle]);
+    }, [isOpenMyArticle, isOpenNotify]);
 
     //Lấy tất cả Article của user 
     const getListArticlesByUserID = async (id) => {
@@ -229,10 +253,20 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
         setIsOpenOptions(false);
     }
 
+    //handle Notifications
     const handleOnCloseNotify = () => {
-        setIsOpenOptions(false);
+        setIsOpenNotify(false);
     }
 
+    const getAllNotificationByUserTargetID = async (userID) => {
+        let res = await fetchGetAllNotificationByUserTargetID(userID);
+        if (res.status === true) {
+            setListNotification(res.data);
+            // console.log(res.data);
+        }
+
+    };
+    //handle close modal my article
     const handleOnCloseMyArtilce = () => {
         setIsOpenMyArticle(false);
     }
@@ -267,14 +301,6 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                 return;
             }
 
-            const newArticle = {
-                Title: articleTitle,
-                Description: articleDescription,
-                Image: articleImage,
-                Status: 'PENDING',
-                categoryID: categoryID,
-                content: listDataContent
-            }
             let res = await fetchCreateNewArticle(articleTitle, articleDescription, articleImage, 'PENDING', currentUser.userID, categoryID);
             if (res.status === true) {
                 const newArticleID = res.data.articleID;
@@ -431,12 +457,13 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                             <div onClick={() => setIsOpenMyArticle(!isOpenMyArticle)}>
                                 <button className='p-1.5 mr-4 cursor-pointer text-sm font-semibold text-black hover:text-slate-500'>Bài viết của tôi</button>
                                 <MyModal
+                                    isScroll={true}
                                     onOpen={isOpenMyArticle}
                                     onClose={handleOnCloseMyArtilce}
                                     className={'right-[120px] top-14 min-w-[380px] bg-white'}
                                     templateHead={{ title: 'Bài viết của tôi', action: 'Xem tất cả' }}
                                     modalBody={
-                                        <div className="overflow-y-auto max-w-[380px] max-h-[460px] mb-2">
+                                        <div className="overflow-y-auto max-h-[460px] max-w-[380px] mb-2">
                                             {myArticles && myArticles.map((article, index) => {
 
                                                 return (
@@ -448,7 +475,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                 )
                                             })}
                                             {
-                                                myArticles.length === 0 && <div className="text-center text-orange-600 mb-4">Bạn chưa đăng bài viết nào.</div>
+                                                myArticles.length === 0 && <div className="text-center text-orange-600 mb-4">Bạn chưa đăng bài viết nào. 😁</div>
                                             }
                                         </div>
                                     }
@@ -460,6 +487,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                     <FontAwesomeIcon icon={faBell} size='lg' />
                                 </div>
                                 <MyModal
+                                    isScroll={true}
                                     onOpen={isOpenNotify}
                                     onClose={handleOnCloseNotify}
                                     className={'right-[76px] top-14 w-[400px] bg-white'}
@@ -472,12 +500,19 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                     templateHead={{ title: 'Thông báo', action: 'Đánh dấu đã đọc' }}
                                     modalBody={
                                         <div className="overflow-y-auto max-h-[460px]">
-                                            <NotifyCard />
-                                            <NotifyCard />
-                                            <NotifyCard />
-                                            <NotifyCard />
-                                            <NotifyCard />
-                                            <NotifyCard />
+                                            {listNotification &&
+                                                listNotification.map((notification, index) => {
+                                                    return (
+                                                        <NotifyCard
+                                                            key={index}
+                                                            handleOnCloseNotify={handleOnCloseNotify}
+                                                            notification={notification}
+                                                        />
+                                                    )
+                                                })}
+                                            {
+                                                listNotification.length === 0 && <div className="text-center text-orange-600 mb-4">Bạn chưa có thông báo nào. 😁</div>
+                                            }
                                         </div>
                                     }
                                     textModalFoot={"Xem tất cả thông báo"}
@@ -487,6 +522,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                             <div onClick={() => setIsOpenOptions(!isOpenOptions)}>
                                 <img alt="" src='/color.jpg' className='ml-3 w-8 h-8 rounded-full cursor-pointer'></img>
                                 <MyModal
+                                    isScroll={true}
                                     onOpen={isOpenOptions}
                                     onClose={handleOnCloseOptions}
                                     className={'right-7 top-14 w-[230px] bg-white'}
@@ -506,7 +542,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="">
-                                                <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Viết bài</button>
+                                                <button onClick={() => navigate(`/new_post/blog`)} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Viết blog</button>
                                             </div>
                                             <div className="mb-2">
                                                 <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết của tôi</button>
@@ -542,7 +578,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                 onOpen={isModalOpenLogin}
                                 onClose={handleCloseModal}
                                 showIconClose={true}
-                                className={'left-[calc(50%-500px/2)] transition-all top-[calc(20%/2)] min-w-[500px] bg-white'}
+                                className={'left-[calc(50%-(500px/2))] transition-all top-[calc(10%)] min-w-[500px] bg-white'}
                                 modalHead={<div></div>}
                                 modalBody={
                                     isModalOpenRegister ?
@@ -585,7 +621,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                                 <div className="text-red-500 text-sm text-center mt-1">{passwordErorr}</div>
                                             </div>
                                             <div onClick={() => handleSubmitFormLoginOrRegister()} className="w-full mt-5 cursor-pointer bg-gradient-to-r from-cyan-500 to-blue-500 font-semibold text-white text-center py-[8px] rounded-full focus:border-orange-500 hover:opacity-80" >Đăng nhập</div>
-                                            <p className="text-center text-sm mt-5">Bạn chưa có tài khoản? <span onClick={() => { setIsModalOpenRegister(true); clearErrorsFormLoginAndRegister() }} className="text-orange-600 font-semibold cursor-pointer">Đăng ký</span></p>
+                                            <p className="text-center text-sm mt-5">Bạn chưa có tài khoản? <span onClick={() => { setIsModalOpenRegister(true); clearErrorsFormLoginAndRegister(); clearDataFormLoginAndRegister(); }} className="text-orange-600 font-semibold cursor-pointer">Đăng ký</span></p>
                                         </div>
                                 }
                             />

@@ -7,15 +7,16 @@ import { fetchGetArticleById } from "../../services/ArticleService";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useMycontext } from "../../components/project/context/MyContextProvider";
 import { fetchLoveArticle } from "../../services/LoveService";
+import { fetchCreateNotification } from "../../services/NotificationService";
 
 
 const ArtilceDetailsPage = () => {
     const { currentUser, setCurrentUser, isModalOpenLogin, setIsModalOpenLogin, isUnauthorized, setUnauthorized, resetUnauthorized } = useMycontext();
     const { articleID } = useParams();
     const [article, setArticle] = useState();
-    const [isLoading, setIsLoading] = useState(true);
     const [isLoved, setIsLoves] = useState(false);
-
+    
+    const [isLoading, setIsLoading] = useState(true);
     setTimeout(() => {
         setIsLoading(false)
     }, 500);
@@ -55,8 +56,18 @@ const ArtilceDetailsPage = () => {
         }
         else {
             let res = await fetchLoveArticle(currentUser.userID, article.articleID);
+
             if(res.status == true) {
                 setIsLoves(!isLoved);
+                const data = {
+                    title: `<strong className="font-semibold">${currentUser.name}</strong> đã thả tim cho bài viết <strong className="font-semibold">${article.title}</strong>`,
+                    articleTargetID: article.articleID,
+                    userTargetID: article.user.userID,
+                    userID: + currentUser.userID
+                }
+                if(res.data === true){
+                    await fetchCreateNotification(data.title, data.articleTargetID, data.userTargetID, data.userID);
+                }
             }
         }
     }
@@ -78,7 +89,7 @@ const ArtilceDetailsPage = () => {
                 <div className="col-span-3 sticky top-[66px] h-fit">
                     <div className="flex justify-end p-12 ml-auto">
                         <div>
-                            <Link className="text-base font-semibold text-black mt-5" to={"/auth/info"}>
+                            <Link className="text-base font-semibold text-black mt-5" to={`/user/info/${article.user.userID}`}>
                                 {article ? article.user.name : 'Lý Đại Cương'}
                             </Link>
                             <hr className="min-w-[160px] mt-4"></hr>
