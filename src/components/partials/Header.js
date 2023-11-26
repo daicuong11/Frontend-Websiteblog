@@ -61,7 +61,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
 
     //
     const handleRegister = async () => {
-        console.log({ fullName, userName, password })
+        // console.log({ fullName, userName, password })
         let res = await fetchRegister(fullName, userName, password, 'GUEST');
         if (res.status) {
             toast.success(`Đăng ký tài khoản thành công`);
@@ -75,7 +75,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const handleLogin = async () => {
         let res = await fetchLogin(userName, password);
         if (res.status) {
-            console.log(res)
+            // console.log(res)
             localStorage.setItem('token', res.data.token);
             resetUnauthorized();
             setCurrentUser(res.data.user);
@@ -343,6 +343,17 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
         }
     };
 
+    //handle trang ca nhan
+    const handleUserInfo = () => {
+        if(isUnauthorized){
+            setIsModalOpenLogin();
+        }
+        else {
+            navigate(`/user/info/${currentUser.userID}`)
+            handleOnCloseOptions();
+        }
+    }
+
     //
     const backgroundImageStyle = {
         backgroundImage: articleImage
@@ -360,7 +371,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
             <div className="nav px-7 grid grid-cols-3 justify-between items-center h-full mx-auto">
                 <div className="header-nav-logo flex items-center">
                     <Link className="cursor-pointer" to={"/"}>
-                        <img alt="" className="w-[38px] h-[38px] rounded-[6px]" src="/color.jpg"></img>
+                        <img alt="" className="w-[38px] h-[38px] rounded-[6px]" src="/CH.png"></img>
                     </Link>
                     <div onClick={() => navigate(-1)} className='back text-[12px] font-semibold flex items-center py-4 pl-4 text-gray-400 cursor-pointer'>
                         <FontAwesomeIcon icon={faChevronLeft} className='icon-back mr-1 w-[6.25px] h-[10px]' />
@@ -538,7 +549,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                         <div className="px-6">
                                             <hr className="mb-2"></hr>
                                             <div className="mb-2">
-                                                <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Trang cá nhân</button>
+                                                <button onClick={() => handleUserInfo()} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Trang cá nhân</button>
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="">

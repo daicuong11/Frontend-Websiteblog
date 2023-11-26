@@ -23,6 +23,7 @@ function App() {
             <Route path='/article/:articleID' element={<ArticleDetailsPage />} />
             <Route path='/user/info/:userID' element={<InfoPage />} />
           </Route>
+          <Route path='/not-found' element={<NotFound />} />
           <Route path='/' element={<NewPostLayout />}>
             <Route path='/new_post/blog' element={<NewPostPage typePost={'blog'} />} />
             <Route path='/new_post/entertainment' element={<NewPostPage typePost={'entertainment'} />} />

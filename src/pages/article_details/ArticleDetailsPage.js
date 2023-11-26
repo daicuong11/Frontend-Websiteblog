@@ -60,7 +60,7 @@ const ArtilceDetailsPage = () => {
             if(res.status == true) {
                 setIsLoves(!isLoved);
                 const data = {
-                    title: `<strong className="font-semibold">${currentUser.name}</strong> đã thả tim cho bài viết <strong className="font-semibold">${article.title}</strong>`,
+                    title: `đã thả tim cho bài viết <strong className="font-semibold">${article.title}</strong>`,
                     articleTargetID: article.articleID,
                     userTargetID: article.user.userID,
                     userID: + currentUser.userID

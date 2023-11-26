@@ -4,6 +4,10 @@ const fetchGetAllNotificationByUserTargetID = (userID) => {
     return axios.get(`api/Notification/target?id=${userID}`);
 }
 
+const fetchGetAllNotificationByUserCreateID = (userID) => {
+    return axios.get(`api/Notification/userID?id=${userID}`);
+}
+
 const fetchCreateNotification = (title, articleTargetID, userTargetID, userID) => {
     return axios.post(`api/Notification`, {
         "title": title,
@@ -19,5 +23,6 @@ const fetchIsReadNotify = (notifyID) => {
 export {
     fetchGetAllNotificationByUserTargetID,
     fetchCreateNotification,
-    fetchIsReadNotify
+    fetchIsReadNotify,
+    fetchGetAllNotificationByUserCreateID
 };

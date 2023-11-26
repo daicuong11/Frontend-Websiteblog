@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react";
-import { fetchGetAllArticleByCategoryID } from "../../../services/ArticleService";
+import { fetchGetTop3FavouriteByUserID } from "../../../services/ArticleService";
 import { useNavigate } from "react-router-dom";
 
 
-const ListArticleLovest = ({ categoryID, className }) => {
-    const [listArticlesByCategoryID, setListArticlesByCategoryID] = useState([]);
+const ListArticleLovest = ({ userID, className }) => {
+    const [listTop3ArticleFavourite, setListTop3ArticleFavourite] = useState([]);
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        getListArticlesOfBlog(categoryID);
-    }, [categoryID])
+        getListArticlesOfBlog(userID);
+    }, [userID])
     //Lấy tất cả Article of blog
-    const getListArticlesOfBlog = async (categoryID) => {
-        let res = await fetchGetAllArticleByCategoryID(categoryID, 1, 10);
+    const getListArticlesOfBlog = async (userID) => {
+        let res = await fetchGetTop3FavouriteByUserID(userID);
         if (res.status === true) {
-            setListArticlesByCategoryID(res.data);
+            setListTop3ArticleFavourite(res.data);
         }
     }
 
     return (
         <div>
             <ul>
-                {listArticlesByCategoryID.slice(0, 3).map((article, index) => {
+                {listTop3ArticleFavourite.slice(0, 3).map((article, index) => {
                     if (index === 0) {
                         return (
                             <li className="mt-4 flex-col" key={`article-${index}`}>
@@ -55,6 +55,7 @@ const ListArticleLovest = ({ categoryID, className }) => {
                         )
                     }
                 })}
+                {listTop3ArticleFavourite.length === 0 && <li className=""><div className="text-center text-orange-600 mb-4">Bạn chưa đăng bài viết nào. 😁</div></li>}
             </ul>
         </div>
     )

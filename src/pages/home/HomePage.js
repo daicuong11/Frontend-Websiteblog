@@ -15,7 +15,7 @@ const HomePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     setTimeout(() => {
         setIsLoading(false)
-    }, 500);
+    }, 1000);
 
     const handleSetCategoryAndPageNumber = (category, pageNumber) => {
         setCategorySelected(category);
@@ -42,7 +42,7 @@ const HomePage = () => {
 
     useEffect(() => {
         handleLoading();
-    });
+    }, []);
     const handleLoading = () => {
         if (isLoading) {
             return (

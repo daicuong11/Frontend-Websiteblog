@@ -28,6 +28,10 @@ const fetchGetAllArticleByUserID = (id, pageNumber, pageSize) => {
     return axios.get(`api/articles/user/${id}`);
 }
 
+const fetchGetTop3FavouriteByUserID = (id) => {
+    return axios.get(`api/articles/favourite/top3?id=${id}`);
+}
+
 const fetchCreateNewArticle = (title, description, articleImage, status, userID, categoryID) => {
     const formData = new FormData();
     formData.append('Title', title);
@@ -48,6 +52,7 @@ const fetchSearchArticleBySearchKey = (searchKey) => {
     return axios.get(`api/articles/search?searchKey=${searchKey}`);
 }
 
+
 export {
     fetchGetAllArticle,
     fetchGetAllArticleByCategoryID,
@@ -57,5 +62,6 @@ export {
     fetchSearchArticleBySearchKey,
     fetchGetAllArticleLatest,
     fetchGetAllArticleFavourite,
-    fetchGetAllArticleOthers
+    fetchGetAllArticleOthers,
+    fetchGetTop3FavouriteByUserID
 };

@@ -48,16 +48,19 @@ const NotifyCard = ({ notification, handleOnCloseNotify }) => {
                     <img className="rounded-full w-[42px] h-[42px] min-w-[42px] min-h-[42px]" alt="" src={`${'/color.jpg'}`} />
                 </div>
                 <div className="flex flex-col justify-center items-start w-full">
-                    <p className="text-sm line-clamp-2" dangerouslySetInnerHTML={{ __html: notification.title }}>
-                    </p>
-                    <div className="text-xs mt-1 text-orange-500 font-semibold">
+                    <div className="font-semibold">
+                        {notification.userCreate.name}
+                        <p className="inline text-sm ml-1 line-clamp-2" dangerouslySetInnerHTML={{ __html: notification.title }}>
+                        </p>
+                    </div>
+                    <div className="text-xs mt-1 font-normal text-orange-500">
                         {handleGetDate(`${notification.createdAt}`) || '3 ngày trước'}
                     </div>
                 </div>
             </div>
             {notification.isRead || (<>
-                <span className="animate-ping absolute top-[34px] right-[14px] inline-flex h-4 w-4 rounded-full bg-sky-400 opacity-75"></span>
-                <span className="absolute top-[36px] right-4 inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                <span className="animate-ping absolute top-[calc(50%-8px)] right-[15px] inline-flex h-4 w-4 rounded-full bg-sky-400 opacity-75"></span>
+                <span className="absolute top-[calc(50%-6px)] right-[18px] inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
             </>)}
         </div>
     </>)

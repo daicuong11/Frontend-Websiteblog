@@ -1,10 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
 
 
 const ArticleCardL = ({ article, isFlexRow }) => {
-    const navigate = useNavigate();
     return article && (
-            <div onClick={() => navigate(`/article/${article.articleID}`)} className={`block px-3 py-2 cursor-pointer m-2 ${isFlexRow ? 'flex' : 'flex-col'} hover:bg-gray-100 transition-all rounded-lg h-full`}>
+            <div onClick={() => window.location.href = `/article/${article.articleID}`} className={`block px-3 py-2 cursor-pointer m-2 ${isFlexRow ? 'flex' : 'flex-col'} hover:bg-gray-100 transition-all rounded-lg h-full`}>
                 <div className="">
                     <img className="rounded-lg w-[282px] h-[188px] min-w-[282px] min-h-[188px]" alt="" src={article ? `https://localhost:7020/api/images/${article.imagePath}` : `/color.jpg`} />
                 </div>
