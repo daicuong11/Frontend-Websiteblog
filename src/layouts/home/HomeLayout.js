@@ -27,7 +27,7 @@ const HomeLayout = () => {
             <Header
                 isShowSearch={true}
             />
-            <div className='min-h-screen'>
+            <div className='min-h-screen mt-[66px]'>
             <Outlet />
             </div>
             <Footer />

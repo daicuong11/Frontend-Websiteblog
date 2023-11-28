@@ -11,7 +11,8 @@ import NewPostLayout from './layouts/new_post/NewPostLayout';
 import { ToastContainer } from 'react-toastify';
 import { MyContextProvider } from './components/project/context/MyContextProvider';
 import InfoPage from './pages/info/InfoPage';
-
+import AccountManagement from './pages/admin/Account/AccountManagement';
+import AccountEdit from './pages/admin/Account/AccountEdit';
 
 function App() {
   return (
@@ -29,7 +30,9 @@ function App() {
             <Route path='/new_post/entertainment' element={<NewPostPage typePost={'entertainment'} />} />
           </Route>
           <Route path='/admin' element={<HomeLayout />}>
-            <Route index element={<UserManagement />} />
+            <Route index element={<AccountManagement />} />
+            <Route path='user/edit/:userID' element={<AccountEdit/>} />
+            <Route path='user/add' element={<AccountEdit/>} />
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
