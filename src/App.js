@@ -14,7 +14,6 @@ import InfoPage from './pages/info/InfoPage';
 import AccountManagement from './pages/admin/Account/AccountManagement';
 import AccountEdit from './pages/admin/Account/AccountEdit';
 import ArticleManagement  from './pages/admin/Article/ArticleManagement';
-import ArticleEdit  from './pages/admin/Article/ArticleEdit.js';
 function App() {
   return (
     <MyContextProvider>
