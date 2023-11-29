@@ -13,7 +13,8 @@ import { MyContextProvider } from './components/project/context/MyContextProvide
 import InfoPage from './pages/info/InfoPage';
 import AccountManagement from './pages/admin/Account/AccountManagement';
 import AccountEdit from './pages/admin/Account/AccountEdit';
-
+import ArticleManagement  from './pages/admin/Article/ArticleManagement';
+import ArticleEdit  from './pages/admin/Article/ArticleEdit.js';
 function App() {
   return (
     <MyContextProvider>
@@ -31,8 +32,12 @@ function App() {
           </Route>
           <Route path='/admin' element={<HomeLayout />}>
             <Route index element={<AccountManagement />} />
-            <Route path='user/edit/:userID' element={<AccountEdit/>} />
+            <Route path='user/edit/:userID' element={<AccountEdit/>} /> 
             <Route path='user/add' element={<AccountEdit/>} />
+          </Route>
+          <Route path='/admin/articles' element={<HomeLayout />}>
+            <Route index element={<ArticleManagement />} />
+            <Route path='article/edit/:userID' element={<AccountEdit/>} />
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
