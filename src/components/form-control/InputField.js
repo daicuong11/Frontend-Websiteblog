@@ -5,13 +5,9 @@ import PropTypes from 'prop-types';
 
 
 
-export default function InputField(props) {
-
+const InputField = (props) =>{
     const { placeholder, name, form, type = 'text', color = 'success' } = props
     const hasError = form.formState.errors[name]
-
-
-
     return (
         <Controller
             name={name}
@@ -36,9 +32,5 @@ export default function InputField(props) {
     )
 }
 
-InputField.propTypes = {
-    form: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    disabled: PropTypes.bool
-}
+
+export default InputField;

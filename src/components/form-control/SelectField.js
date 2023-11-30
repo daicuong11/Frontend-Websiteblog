@@ -2,7 +2,7 @@ import { MenuItem, TextField } from '@mui/material'
 import React from 'react'
 import { Controller } from 'react-hook-form'
 
-export default function SelectField(props) {
+const SelectField = (props) => {
     const { name, color = '', defaultOption = 'Lựa chọn', defaultValue = -1, menu = [], form, defaultSelect = "", onChange } = props
     const hasError = form.formState.errors[name]
     return (
@@ -43,3 +43,4 @@ export default function SelectField(props) {
         />
     )
 }
+export default SelectField;
