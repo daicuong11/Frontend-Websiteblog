@@ -18,4 +18,15 @@ const deleteUser = async (id) => {
 const lockUser = async (id) => {
     return await axios.post(`api/user/lock/${id}`);
 }
-export { fetchGetAll, fetchGetUserById, createUser, changeInfUser, deleteUser, lockUser };
+
+const fetchSavedArticle = (userID, articleID) => {
+    return axios.post(`api/SaveArticle`, {
+        "userTargetID": userID,
+        "articleID": articleID
+      });
+}
+
+const fetchGetAllSaved = (userID, pageNumber) => {
+    return axios.get(`api/SaveArticle/target?id=${userID}&pageNumber=${pageNumber}&pageSize=10`);
+}
+export { fetchGetAll, fetchGetUserById, createUser, changeInfUser, deleteUser, lockUser, fetchGetAllSaved, fetchSavedArticle };

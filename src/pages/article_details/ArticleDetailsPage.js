@@ -11,7 +11,7 @@ import { fetchCreateNotification } from "../../services/NotificationService";
 
 
 const ArtilceDetailsPage = () => {
-    const { currentUser, setCurrentUser, isModalOpenLogin, setIsModalOpenLogin, isUnauthorized, setUnauthorized, resetUnauthorized } = useMycontext();
+    const { currentUser,  setIsModalOpenLogin, isUnauthorized } = useMycontext();
     const { articleID } = useParams();
     const [article, setArticle] = useState();
     const [isLoved, setIsLoves] = useState(false);

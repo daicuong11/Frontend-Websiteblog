@@ -102,7 +102,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
     return (
         <div className="grid grid-cols-12 mt-4">
             {/* layout left */}
-            <div className="fixed top-[144px] left-[14px]">
+            <div className="hidden sm:block fixed top-[144px] left-[14px]">
                 <div className="flex flex-col items-center">
                     <div className="relative">
                         <button onClick={() => setClickOptionPlus(!clickOptionPlus)} className="w-11 h-11 bg-blue-600 rounded-full cursor-pointer hover:text-xl transition-all">
@@ -146,7 +146,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
                     </div>
                     <div className="grid grid-cols-12">
                         {/* List article */}
-                        <div className="col-span-8 pb-11 pr-16">
+                        <div className="col-span-12 lg:col-span-8 pb-11 pr-16">
                             {/* article items */}
                             {(listArticles.length > 0) ?
                                 (
@@ -184,7 +184,7 @@ const MainContent = ({ listCategory, currentCategoryID, currentCategoryName, pag
 
                         </div>
                         {/* filter and Quảng cáo */}
-                        <div className="col-span-4 px-3">
+                        <div className="hidden lg:block col-span-4 px-3">
                             {/* Filter */}
                             <div className="my-4">
                                 <h3 className="uppercase text-sm font-semibold text-gray-500">Các chủ đề được đề xuất</h3>

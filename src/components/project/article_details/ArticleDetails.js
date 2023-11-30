@@ -6,9 +6,14 @@ import ListArticleSM from "../list_article/ListArticleSM";
 import ContentIsShow from "../article_content/ContentIsShow";
 import { fetchGetAllArticleByUserID } from "../../../services/ArticleService";
 import { Link } from "react-router-dom";
+import { async } from "q";
+import { useMycontext } from "../context/MyContextProvider";
+import { fetchSavedArticle } from "../../../services/UserService";
 
 
 const ArtilceDetails = ({ article }) => {
+    const { currentUser, setCurrentUser, isModalOpenLogin, setIsModalOpenLogin, isUnauthorized, setUnauthorized, resetUnauthorized } = useMycontext();
+    const [isSaved, setIsSaved] = useState(false);
     const [clickedOptions, setClickedOptions] = useState(false);
     const [userArticles, setUserArticles] = useState([]);
 
@@ -26,6 +31,20 @@ const ArtilceDetails = ({ article }) => {
 
     const handleCloseModalOptions = () => {
         setClickedOptions(false);
+    }
+
+    const handleSavedArticle = async () => {
+        if(isUnauthorized){
+            setIsModalOpenLogin(true);
+        }
+        else {
+            // console.log(currentUser.userID + ' / ' + article.articleID);
+            let res = await fetchSavedArticle(currentUser.userID, article.articleID);
+
+            if(res.status == true) {
+                setIsSaved(!isSaved);
+            }
+        }
     }
 
     return article && (
@@ -55,8 +74,8 @@ const ArtilceDetails = ({ article }) => {
                     </div>
 
                     <div className="flex">
-                        <div className="py-1 px-2 cursor-pointer text-gray-500">
-                            <FontAwesomeIcon icon={faBookmark} />
+                        <div onClick={() => handleSavedArticle()} className="py-1 px-2 cursor-pointer text-gray-500">
+                            <FontAwesomeIcon className={`${isSaved ? 'text-orange-500' : ''}`} icon={faBookmark} />
                         </div>
                         <div onClick={() => setClickedOptions(!clickedOptions)} className="relative py-1 px-2 cursor-pointer text-gray-500">
                             <FontAwesomeIcon icon={faEllipsis} />

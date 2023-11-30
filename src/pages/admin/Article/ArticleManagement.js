@@ -1,10 +1,7 @@
-import TableUser from "../../../components/project/table/TableUser";
 import { useEffect, useRef, useState } from "react";
-import {fetchGetAllArticle, changeArticleStatus } from "../../../services/ArticleService";
+import { fetchGetAllArticleAllStatus } from "../../../services/ArticleService";
 
-import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight, faPlus } from '@fortawesome/free-solid-svg-icons'
+
 import MyPagination from "../../../components/project/panigation/MyPanigation";
 import TableArticle from "../../../components/project/table/TableArticle";
 
@@ -18,7 +15,7 @@ const ArticleManagement = () => {
         getlistArticle();
     }, []);
     const getlistArticle = async (keyword, page = 1) => {
-        let res = await fetchGetAllArticle(page, 5, keyword);
+        let res = await fetchGetAllArticleAllStatus(page, 5, keyword);
         // neu thanh cong
         // luu thong tin pagination
         // set data
@@ -42,14 +39,14 @@ const ArticleManagement = () => {
             <div className="row justify-center items-center">
                 <div className="col">
                     <div className="flex items-center">
-                        <Link to="/admin/article/add" className="bg-green-700 text-lg text-white px-3 py-1 border rounded-lg my-5 mt-6 items-center w-1/6">
+                        {/* <Link to="/admin/article/add" className="bg-green-700 text-lg text-white px-3 py-1 border rounded-lg my-5 mt-6 items-center w-1/6">
                             <FontAwesomeIcon className="pr-2 text-sm" icon={faPlus} />
                             Thêm bài viết mới
-                        </Link>
+                        </Link> */}
                     </div>
-                    <div className="flex items-center">
-                        <input ref={searchRef} className="px-3 border outline-none py-1" placeholder="Tìm kiếm ở đây" />
-                        <button onClick={() => handleSearch()} className="px-3 py-1 border bg-green-700 text-white">Tìm kiếm</button>
+                    <div className="flex items-center mt-5">
+                        <input ref={searchRef} className="px-3 border outline-none py-1 rounded-l-md" placeholder="Tìm kiếm ở đây" />
+                        <button onClick={() => handleSearch()} className="px-3 py-1 border bg-green-700 text-white rounded-r-md">Tìm kiếm</button>
                     </div>
                     <TableArticle
                         listArticle={listArticle}

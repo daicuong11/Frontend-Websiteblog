@@ -160,8 +160,8 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
         if (password.trim() === '') {
             setPasswordErorr('Mật khẩu không được để trống');
             return false;
-        } else if (password.trim().length < 6) {
-            setPasswordErorr('Mật khẩu phải có ít nhất 6 ký tự');
+        } else if (password.trim().length < 5) {
+            setPasswordErorr('Mật khẩu phải có ít nhất 5 ký tự');
             return false;
         }
         // Add more conditions for password validation if needed
@@ -365,11 +365,12 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     };
 
     // console.log(isUnauthorized);
+    // console.log(currentUser)
 
     return (
         <header className="bg-white h-[66px] header fixed top-0 left-0 right-0 z-[9999]">
             <div className="nav px-7 grid grid-cols-3 justify-between items-center h-full mx-auto">
-                <div className="header-nav-logo flex items-center">
+                <div className="col-span-1 header-nav-logo flex items-center">
                     <Link className="cursor-pointer" to={"/"}>
                         <img alt="" className="w-[38px] h-[38px] rounded-[6px]" src="/CH.png"></img>
                     </Link>
@@ -378,10 +379,10 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                         <span className="uppercase">Quay lại</span>
                     </div>
                 </div>
-                <div className="header-nav-search flex justify-center items-center">
+                <div className="sm:col-span-1 hidden header-nav-search sm:flex justify-center items-center">
                     {isShowSearch && <MySearch />}
                 </div>
-                <div className="header-nav-actions flex justify-end">
+                <div className="col-span-2 sm:col-span-1 header-nav-actions flex justify-end">
                     {!isUnauthorized ?
 
                         <div className='flex items-center'>
@@ -465,7 +466,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                 </div>
                             }
                             {/* bài viết của tôi */}
-                            <div onClick={() => setIsOpenMyArticle(!isOpenMyArticle)}>
+                            <div className="hidden sm:block" onClick={() => setIsOpenMyArticle(!isOpenMyArticle)}>
                                 <button className='p-1.5 mr-4 cursor-pointer text-sm font-semibold text-black hover:text-slate-500'>Bài viết của tôi</button>
                                 <MyModal
                                     isScroll={true}
@@ -550,21 +551,23 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                             <hr className="mb-2"></hr>
                                             <div className="mb-2">
                                                 <button onClick={() => handleUserInfo()} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Trang cá nhân</button>
+                                                {currentUser && currentUser.role === 'ADMIN' && <button onClick={() => navigate('/admin')} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Admin</button>}
+                                                {currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'EDITOR') && <button onClick={() => navigate('/admin/articles')} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Duyệt bài</button>}
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="">
                                                 <button onClick={() => navigate(`/new_post/blog`)} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Viết blog</button>
                                             </div>
                                             <div className="mb-2">
-                                                <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết của tôi</button>
+                                                {/* <button onClick={() => navigate('/user/my-article')} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết của tôi</button> */}
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="mb-2">
-                                                <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết đã lưu</button>
+                                                <button onClick={() => {navigate('/user/saved-article'); setIsOpenOptions(false);}} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết đã lưu</button>
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="">
-                                                <button className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Cài đặt</button>
+                                                <button onClick={() => {navigate('/user/change-password'); setIsOpenOptions(false);}} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đổi mật khẩu</button>
                                             </div>
                                             <div className="mb-2">
                                                 <button onClick={() => handleLogout()} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đăng xuất</button>

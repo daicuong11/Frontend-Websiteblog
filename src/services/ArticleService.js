@@ -1,7 +1,11 @@
 import axios from "./customize-axios";
 
-const fetchGetAllArticle = (pageNumber, pageSize, search ="") => {
-    return axios.get(`api/articles?s=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+const fetchGetAllArticle = (pageNumber, pageSize) => {
+    return axios.get(`api/articles?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+}
+
+const fetchGetAllArticleAllStatus = (pageNumber, pageSize, s = "") => {
+    return axios.get(`api/articles/all-status?searchKey=${s}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
 }
 
 const fetchGetAllArticleLatest = (pageNumber, pageSize) => {
@@ -51,21 +55,21 @@ const fetchCreateNewArticle = (title, description, articleImage, status, userID,
 const fetchSearchArticleBySearchKey = (searchKey) => {
     return axios.get(`api/articles/search?searchKey=${searchKey}`);
 }
-const changeArticle = (id, payload) => {
-    const formData = new FormData();
-    formData.append('Title', payload.title);
-    formData.append('Description', payload.description);
-    formData.append('Image', payload.articleImage);
-    formData.append('Status', payload.status);
-    formData.append('UserID', payload.userID);
-    formData.append('CategoryID', payload.categoryID);
+// const changeArticle = (id, payload) => {
+//     const formData = new FormData();
+//     formData.append('Title', payload.title);
+//     formData.append('Description', payload.description);
+//     formData.append('Image', payload.articleImage);
+//     formData.append('Status', payload.status);
+//     formData.append('UserID', payload.userID);
+//     formData.append('CategoryID', payload.categoryID);
 
-    return axios.put(`api/articles/${id}`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
-}
+//     return axios.put(`api/articles/${id}`, formData, {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//         },
+//     });
+// }
 const changeArticleStatus = (id, payload) => {
     return axios.put(`api/articles/status/${id}`, {StatusCode : payload.status})
 }
@@ -81,5 +85,6 @@ export {
     fetchGetAllArticleFavourite,
     fetchGetAllArticleOthers,
     fetchGetTop3FavouriteByUserID,
-    changeArticleStatus
+    changeArticleStatus,
+    fetchGetAllArticleAllStatus
 };

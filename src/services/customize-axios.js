@@ -39,7 +39,7 @@ instance.interceptors.response.use(
       }
     }
     return error.response.data;
-    return Promise.reject(error);
+    // return Promise.reject(error);
   }
 );
 

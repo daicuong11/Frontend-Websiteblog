@@ -14,6 +14,9 @@ import InfoPage from './pages/info/InfoPage';
 import AccountManagement from './pages/admin/Account/AccountManagement';
 import AccountEdit from './pages/admin/Account/AccountEdit';
 import ArticleManagement  from './pages/admin/Article/ArticleManagement';
+import AdminLayout from './layouts/Admin/AdminLayout';
+import MyPage from './pages/my_page/MyPage';
+import ChangePassword from './pages/change-password/ChangePassword';
 function App() {
   return (
     <MyContextProvider>
@@ -23,18 +26,20 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path='/article/:articleID' element={<ArticleDetailsPage />} />
             <Route path='/user/info/:userID' element={<InfoPage />} />
+            <Route path='/user/change-password' element={<ChangePassword />} />
+            <Route path='/user/saved-article' element={<MyPage />} />
           </Route>
           <Route path='/not-found' element={<NotFound />} />
           <Route path='/' element={<NewPostLayout />}>
             <Route path='/new_post/blog' element={<NewPostPage typePost={'blog'} />} />
             <Route path='/new_post/entertainment' element={<NewPostPage typePost={'entertainment'} />} />
           </Route>
-          <Route path='/admin' element={<HomeLayout />}>
+          <Route path='/admin' element={<AdminLayout />}>
             <Route index element={<AccountManagement />} />
             <Route path='user/edit/:userID' element={<AccountEdit/>} /> 
             <Route path='user/add' element={<AccountEdit/>} />
           </Route>
-          <Route path='/admin/articles' element={<HomeLayout />}>
+          <Route path='/admin/articles' element={<AdminLayout />}>
             <Route index element={<ArticleManagement />} />
             <Route path='article/edit/:userID' element={<AccountEdit/>} />
           </Route>

@@ -3,10 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ModalAbsolute from "../../modal/ModalAbsolute";
+import { fetchSavedArticle } from "../../../services/UserService";
+import { useMycontext } from "../context/MyContextProvider";
 
 
 const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
+    const { currentUser, setIsModalOpenLogin, isUnauthorized } = useMycontext();
     const [clickedOptions, setClickedOptions] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
 
     const handleCloseModalOptions = () => {
         setClickedOptions(false);
@@ -15,6 +19,20 @@ const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
     const handleMoveScreenOnTop = () => {
         window.scrollTo({ top: 0, behavior: 'auto' });
     };
+
+    const handleSavedArticle = async () => {
+        if (isUnauthorized) {
+            setIsModalOpenLogin(true);
+        }
+        else {
+            // console.log(currentUser.userID + ' / ' + article.articleID);
+            let res = await fetchSavedArticle(currentUser.userID, article.articleID);
+
+            if (res.status == true) {
+                setIsSaved(!isSaved);
+            }
+        }
+    }
 
     return article && (<>
         <div className="p-6 mb-4 border-2 rounded-2xl">
@@ -29,8 +47,8 @@ const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
                 </div>
 
                 <div className="flex">
-                    <div className="py-1 px-2 cursor-pointer text-gray-500">
-                        <FontAwesomeIcon icon={faBookmark} />
+                    <div onClick={() => handleSavedArticle()} className="py-1 px-2 cursor-pointer text-gray-500">
+                        <FontAwesomeIcon className={`${isSaved ? 'text-orange-500' : ''}`} icon={faBookmark} />
                     </div>
                     <div onClick={() => setClickedOptions(!clickedOptions)} className="relative z-0 py-1 px-2 cursor-pointer text-gray-500">
                         <FontAwesomeIcon icon={faEllipsis} />
@@ -51,7 +69,7 @@ const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
                 </div>
             </div>
             <div className="grid grid-cols-3">
-                <div className="col-span-2 mt-2">
+                <div className="col-span-3 xl:col-span-2 mt-2">
                     <Link to={`/article/${article.articleID}`} >
                         <h1 className="text-xl font-bold">
                             {article ? article.title : 'Authentication & Authorization trong ReactJS'}
@@ -76,7 +94,7 @@ const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
                         </p>
                     </div>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex xl:justify-end col-span-3 items-center justify-center mt-5 xl:col-span-1">
                     <Link to={`/article/${article.articleID}`}>
                         <img alt="" src={article ? `https://localhost:7020/api/images/${article.imagePath}` : "/color.jpg"} className="w-[200px] h-[120px] max-w-[200px] max-h-[120px] rounded-xl"></img>
                     </Link>
