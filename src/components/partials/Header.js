@@ -14,6 +14,7 @@ import { fetchGetUserByJWT, fetchLogin, fetchRegister } from "../../services/Aut
 import { fetchGetAllCategory } from "../../services/CategoryService";
 import { fetchCreateNewContent } from "../../services/ContentService";
 import { fetchGetAllNotificationByUserTargetID } from "../../services/NotificationService";
+import { fetchGetUserById } from "../../services/UserService";
 
 
 const Categorys = {
@@ -75,20 +76,32 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
     const handleLogin = async () => {
         let res = await fetchLogin(userName, password);
         if (res.status) {
-            // console.log(res)
-            localStorage.setItem('token', res.data.token);
-            resetUnauthorized();
-            setCurrentUser(res.data.user);
-            const name = res.data.user.name;
-            toast.success(
-                <div>
-                    Xin chào <strong >{name}</strong>
-                </div>
-            );
-            handleCloseModal();
-            return;
+            if (res.data.user) {
+                const response = await fetchGetUserById(res.data.user.userID);
+                if (response.status === true) {
+                    if (response.data.isLocked === true) {
+                        toast.error('Tài khoản của bạn đã bị khóa');
+                    }
+                    else {
+                        localStorage.setItem('token', res.data.token);
+                        resetUnauthorized();
+                        setCurrentUser(res.data.user);
+                        const name = res.data.user.name;
+                        toast.success(
+                            <div>
+                                Xin chào <strong >{name}</strong>
+                            </div>
+                        );
+                        handleCloseModal();
+                        return;
+                    }
+                }
+            }
+
         }
-        toast.error(res.message);
+        else {
+            toast.error(res.message);
+        }
     };
 
     const handleLogout = () => {
@@ -345,7 +358,7 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
 
     //handle trang ca nhan
     const handleUserInfo = () => {
-        if(isUnauthorized){
+        if (isUnauthorized) {
             setIsModalOpenLogin();
         }
         else {
@@ -563,11 +576,11 @@ const Header = ({ isShowSearch, isShowBtnPublish, nav }) => {
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="mb-2">
-                                                <button onClick={() => {navigate('/user/saved-article'); setIsOpenOptions(false);}} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết đã lưu</button>
+                                                <button onClick={() => { navigate('/user/saved-article'); setIsOpenOptions(false); }} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Bài viết đã lưu</button>
                                             </div>
                                             <hr className="mb-2"></hr>
                                             <div className="">
-                                                <button onClick={() => {navigate('/user/change-password'); setIsOpenOptions(false);}} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đổi mật khẩu</button>
+                                                <button onClick={() => { navigate('/user/change-password'); setIsOpenOptions(false); }} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đổi mật khẩu</button>
                                             </div>
                                             <div className="mb-2">
                                                 <button onClick={() => handleLogout()} className="w-full text-left hover:text-black text-gray-500 cursor-pointer text-sm py-[10px]">Đăng xuất</button>

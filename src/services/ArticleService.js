@@ -5,7 +5,7 @@ const fetchGetAllArticle = (pageNumber, pageSize) => {
 }
 
 const fetchGetAllArticleAllStatus = (pageNumber, pageSize, s = "") => {
-    return axios.get(`api/articles/all-status?searchKey=${s}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    return axios.get(`api/articles/all-status?searchKey=${s}&pageNumber=${pageNumber}&pageSize=5`);
 }
 
 const fetchGetAllArticleLatest = (pageNumber, pageSize) => {

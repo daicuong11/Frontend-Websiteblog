@@ -1,13 +1,14 @@
 import { faBookmark, faCalendarDay, faClock, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModalAbsolute from "../../modal/ModalAbsolute";
 import { fetchSavedArticle } from "../../../services/UserService";
 import { useMycontext } from "../context/MyContextProvider";
 
 
 const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
+    const navigate = useNavigate();
     const { currentUser, setIsModalOpenLogin, isUnauthorized } = useMycontext();
     const [clickedOptions, setClickedOptions] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
@@ -41,7 +42,7 @@ const ArticleCardXL = ({ article, handleSetCategoryAndPageNumber }) => {
                     <div className="">
                         <img className="w-[30px] h-[30px] max-w-[30px] max-h-[30px] border-[3px] border-r-red-500 border-t-yellow-500 border-b-red-500 border-l-red-500 rounded-full" alt="/color.jpg" src={"/color.jpg"} />
                     </div>
-                    <div className="text-xs text-black font-semibold ml-2">
+                    <div onClick={() => navigate(`/user/info/${article.user.userID}`)} className="text-xs text-black font-semibold ml-2 cursor-pointer">
                         {(article && article.user) ? article.user.name : 'Đại Cương'}
                     </div>
                 </div>
